@@ -1,0 +1,18 @@
+{
+  "name": "Javhastudios Tools",
+  "short_name": "JavhaTools",
+  "description": "Herramientas para producciones y mezclas — Javhastudios",
+  "start_url": "./Pomodoro.html",
+  "display": "standalone",
+  "background_color": "#e8e8ec",
+  "theme_color": "#0f6151",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon_tools.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
