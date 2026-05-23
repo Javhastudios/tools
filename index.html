@@ -12,7 +12,9 @@
     --panel: #f2f2f6;
     --border: #d0d0dc;
     --green: #0f6151;
+    --green-light: rgba(15,97,81,0.08);
     --muted: #333333;
+    --text: #222233;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -34,11 +36,10 @@
     );
     pointer-events: none; z-index: 999;
   }
-  .container { width: 560px; max-width: 100%; text-align: center; }
+  .container { width: 580px; max-width: 100%; text-align: center; }
   .logo-wordmark {
     height: 48px; width: auto;
-    display: block; margin: 0 auto 16px;
-    opacity: 0.85;
+    display: block; margin: 0 auto 16px; opacity: 0.85;
   }
   .logo-wordmark:hover { opacity: 1; }
   .tagline {
@@ -49,7 +50,7 @@
   .tagline span { color: var(--green); }
   .grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr;
     gap: 16px;
     margin-bottom: 40px;
   }
@@ -57,7 +58,7 @@
     background: var(--panel);
     border: 1px solid var(--border);
     border-radius: 4px;
-    padding: 32px 24px;
+    padding: 28px 20px;
     text-decoration: none;
     color: inherit;
     transition: all 0.2s;
@@ -75,16 +76,14 @@
     box-shadow: 0 8px 24px rgba(0,0,0,0.12);
     border-color: var(--green);
   }
-  .card-icon {
-    font-size: 32px; margin-bottom: 16px;
-  }
+  .card-icon { font-size: 28px; margin-bottom: 12px; }
   .card-title {
-    font-size: 11px; font-weight: 700;
-    letter-spacing: 3px; text-transform: uppercase;
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
     color: var(--green); margin-bottom: 8px;
   }
   .card-desc {
-    font-size: 12px; font-weight: 500;
+    font-size: 11px; font-weight: 500;
     color: var(--muted); line-height: 1.6;
   }
   .footer {
@@ -95,7 +94,7 @@
   .footer a { color: inherit; text-decoration: none; }
   .footer a:hover { text-decoration: underline; }
 
-  @media (max-width: 480px) {
+  @media (max-width: 600px) {
     .grid { grid-template-columns: 1fr; }
     .tagline { margin-bottom: 32px; letter-spacing: 3px; }
   }
@@ -112,12 +111,17 @@
     <a class="card" href="Pomodoro.html">
       <div class="card-icon">⏱</div>
       <div class="card-title">Pomodoro Timer</div>
-      <div class="card-desc">Gestiona tu tiempo de trabajo con la técnica Pomodoro. Evita la fatiga mental y auditiva.</div>
+      <div class="card-desc">Gestiona tu tiempo de trabajo. Evita la fatiga mental y auditiva.</div>
     </a>
     <a class="card" href="BPM.html">
       <div class="card-icon">🎚</div>
       <div class="card-title">BPM Calculator</div>
-      <div class="card-desc">Tap tempo, delays, tiempos de reverb y divisiones rítmicas sincronizadas al BPM.</div>
+      <div class="card-desc">Tap tempo, delays, reverb y divisiones rítmicas al BPM.</div>
+    </a>
+    <a class="card" href="Frequency.html">
+      <div class="card-icon">🎹</div>
+      <div class="card-title">Hz ↔ Nota ↔ Hz</div>
+      <div class="card-desc">Equivalencia Hz, notas, piano interactivo y rango de instrumentos.</div>
     </a>
   </div>
 
