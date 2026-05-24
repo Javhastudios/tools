@@ -2,6 +2,9 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Círculo de Quintas — JAVHASTUDIOS</title>
 <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -122,6 +125,8 @@
     display: block; text-align: center; color: var(--muted); line-height: 1.2;
   }
   .chord-name.maj { border-color: var(--green); color: var(--green); background: var(--green-light); }
+  .chord-cell:hover .chord-name { filter: brightness(1.08); }
+  .chord-cell.playing .chord-name { box-shadow: 0 0 0 2px currentColor; }
   .chord-name.dom { border-color: #7ab800; color: #5a8800; background: rgba(122,184,0,0.08); }
   .chord-name.min { color: #555566; }
   .chord-name.dim { color: #aaaaaa; font-style: italic; }
@@ -635,6 +640,108 @@ function updatePanels() {
 }
 
 
+
+// ── Audio engine (soundfont) ──────────────────────────────────────────────────
+const SOUNDFONT_BASE = './sounds/piano/';
+// Samples available: note name → file
+const SAMPLES = {
+  'C3':'C3','Cs3':'Ds3','D3':'Ds3','Ds3':'Ds3','E3':'Ds3',
+  'F3':'Fs3','Fs3':'Fs3','G3':'Fs3','Gs3':'A3','A3':'A3',
+  'As3':'A3','B3':'B3','C4':'C4','Cs4':'Ds4','D4':'Ds4',
+  'Ds4':'Ds4','E4':'Ds4','F4':'Fs4','Fs4':'Fs4','G4':'Fs4',
+  'Gs4':'A4','A4':'A4','As4':'A4','B4':'B4'
+};
+// MIDI note names for C3(48)..B4(71)
+const MIDI_NAMES = [
+  'C3','Cs3','D3','Ds3','E3','F3','Fs3','G3','Gs3','A3','As3','B3',
+  'C4','Cs4','D4','Ds4','E4','F4','Fs4','G4','Gs4','A4','As4','B4'
+];
+// Sample MIDI base notes
+const SAMPLE_MIDI = {
+  'C3':48,'Ds3':51,'Fs3':54,'A3':57,'B3':59,
+  'C4':60,'Ds4':63,'Fs4':66,'A4':69,'B4':71
+};
+
+let sfCtx = null;
+const sfBuffers = {}; // sample name → AudioBuffer
+let sfLoaded = false;
+let sfLoading = false;
+
+function midiToNoteName(midi) {
+  return MIDI_NAMES[midi - 48] || null;
+}
+
+async function loadSoundfonts() {
+  if (sfLoaded || sfLoading) return;
+  sfLoading = true;
+  try {
+    sfCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const sampleNames = ['C3','Ds3','Fs3','A3','B3','C4','Ds4','Fs4','A4','B4'];
+    await Promise.all(sampleNames.map(async name => {
+      try {
+        const res = await fetch(SOUNDFONT_BASE + name + '.mp3');
+        if (!res.ok) throw new Error('Not found');
+        const buf = await res.arrayBuffer();
+        sfBuffers[name] = await sfCtx.decodeAudioData(buf);
+      } catch(e) {
+        console.warn('Could not load sample:', name, e.message);
+      }
+    }));
+    sfLoaded = Object.keys(sfBuffers).length > 0;
+    console.log('Soundfont loaded:', Object.keys(sfBuffers).length, 'samples');
+  } catch(e) {
+    console.warn('Soundfont load failed:', e);
+  }
+  sfLoading = false;
+}
+
+function playMidi(midi, delay = 0, volume = 0.7) {
+  if (!sfCtx || !sfLoaded) return;
+  const noteName = midiToNoteName(midi);
+  if (!noteName) return;
+  const sampleName = SAMPLES[noteName];
+  if (!sampleName || !sfBuffers[sampleName]) return;
+
+  const sampleMidi = SAMPLE_MIDI[sampleName];
+  const semitonesDiff = midi - sampleMidi;
+  const playbackRate = Math.pow(2, semitonesDiff / 12);
+
+  const src = sfCtx.createBufferSource();
+  src.buffer = sfBuffers[sampleName];
+  src.playbackRate.value = playbackRate;
+
+  const gain = sfCtx.createGain();
+  const now = sfCtx.currentTime + delay;
+  gain.gain.setValueAtTime(0, now);
+  gain.gain.linearRampToValueAtTime(volume, now + 0.01);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
+
+  src.connect(gain);
+  gain.connect(sfCtx.destination);
+  src.start(now);
+  src.stop(now + 2.1);
+}
+
+function playChordMidis(midis) {
+  if (!sfCtx) {
+    // Try to load on first interaction
+    loadSoundfonts().then(() => playChordMidis(midis));
+    return;
+  }
+  if (sfCtx.state === 'suspended') sfCtx.resume();
+  // Arpegio: 60ms entre notas
+  midis.forEach((midi, i) => playMidi(midi, i * 0.06, 0.6));
+}
+
+// Preload on page load
+window.addEventListener('load', () => {
+  // Trigger load on first user interaction to respect autoplay policy
+  document.addEventListener('click', function initSF() {
+    loadSoundfonts();
+    document.removeEventListener('click', initSF);
+  }, { once: true });
+});
+
 // ── Piano ─────────────────────────────────────────────────────────────────────
 const NOTE_SEMI = {
   'Do':0,'Re':2,'Mi':4,'Fa':5,'Sol':7,'La':9,'Si':11,
@@ -789,11 +896,22 @@ function selectChordFromCell(panelIdx, rootName, type, cellEl) {
     cellEl.querySelector('.chord-name').style.opacity = '1';
   }
   refreshPianos();
+
+  // Play chord if soundfont available
+  if (chord && chord.midis) {
+    playChordMidis(chord.midis);
+  }
 }
 
 window.addEventListener('resize', () => { setTimeout(refreshPianos, 60); });
 
 // ── Init ───────────────────────────────────────────────────────────────────────
+// Unregister any service workers that might cache this page
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.getRegistrations().then(regs => {
+    regs.forEach(reg => reg.unregister());
+  });
+}
 drawWheel();
 updatePanels();
 
