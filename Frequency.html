@@ -997,6 +997,150 @@ function setupChartMouse() {
       drawInstruments(lastMarkerHz);
     });
   }
+
+  // ── Touch support ─────────────────────────────────────────────────────────
+  // Helper: convierte un touch en el mismo resultado que mousemove en freqChart
+  function handleFreqTouch(e) {
+    e.preventDefault();
+    const touch = e.touches[0];
+    const rect = canvas.getBoundingClientRect();
+    const xPos = touch.clientX - rect.left;
+    const w = rect.width;
+    const logMin = Math.log10(20);
+    const logMax = Math.log10(20000);
+    hoverHz = Math.pow(10, logMin + (Math.max(0, Math.min(w, xPos)) / w) * (logMax - logMin));
+    hoverHz = Math.min(20000, Math.max(20, hoverHz));
+
+    const midiFloat = 69 + 12 * Math.log2(hoverHz / 440);
+    const midiRound = Math.round(midiFloat);
+    const cents = Math.round((midiFloat - midiRound) * 100);
+    const n = midiToNote(midiRound);
+
+    document.getElementById('result-hz').textContent = hoverHz < 100 ? hoverHz.toFixed(2) : Math.round(hoverHz);
+    document.getElementById('result-midi').textContent = midiRound;
+    document.getElementById('result-period').textContent = (1000 / hoverHz).toFixed(2) + ' ms';
+    document.getElementById('result-note').textContent = n.es + ' / ' + n.en + n.octave;
+    document.getElementById('result-cents').textContent = (cents >= 0 ? '+' : '') + cents + ' cents';
+    document.getElementById('result-midi2').textContent = midiRound;
+    document.getElementById('inpHz').value = Math.round(hoverHz);
+
+    drawChart(hoverHz);
+    drawPiano(midiRound);
+    drawInstruments(hoverHz);
+  }
+
+  canvas.addEventListener('touchstart',  handleFreqTouch, { passive: false });
+  canvas.addEventListener('touchmove',   handleFreqTouch, { passive: false });
+  canvas.addEventListener('touchend', e => {
+    e.preventDefault();
+    if (!hoverHz) return;
+    const midiFloat = 69 + 12 * Math.log2(hoverHz / 440);
+    const midiRound = Math.round(midiFloat);
+    const NOTE_ORDER = ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'];
+    const idx = ((midiRound % 12) + 12) % 12;
+    const oct = Math.floor(midiRound / 12) - 1;
+    document.getElementById('selNote').value = NOTE_ORDER[idx];
+    document.getElementById('selOctave').value = oct;
+    lastMarkerHz = hoverHz;
+    lastMarkerMidi = midiRound;
+    calcNoteToHz();
+  }, { passive: false });
+
+  // Touch en el piano
+  if (pCanvas) {
+    function handlePianoTouch(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const rect = pCanvas.getBoundingClientRect();
+      const xPos = touch.clientX - rect.left;
+      const yPos = touch.clientY - rect.top;
+      const w = rect.width;
+      const totalWhite = 8 * 7 + 1;
+      const wKey = w / totalWhite;
+      const WHITE_NOTES = [0,2,4,5,7,9,11];
+      const BLACK_OFFSETS = {1:0.6, 3:1.6, 6:3.6, 8:4.6, 10:5.6};
+      const wBlack = wKey * 0.6;
+      const hBlack = rect.height * 0.6;
+
+      let foundMidi = null;
+      for (let oct = 0; oct < 8; oct++) {
+        for (const [noteIdx, offset] of Object.entries(BLACK_OFFSETS)) {
+          const x = (oct * 7 + parseFloat(offset)) * wKey;
+          if (xPos >= x && xPos <= x + wBlack && yPos <= hBlack) {
+            foundMidi = (oct + 1) * 12 + parseInt(noteIdx);
+            break;
+          }
+        }
+        if (foundMidi !== null) break;
+      }
+      if (foundMidi === null) {
+        const keyIndex = Math.floor(xPos / wKey);
+        const oct = Math.floor(keyIndex / 7);
+        const pos = keyIndex % 7;
+        if (oct < 8) foundMidi = (oct + 1) * 12 + WHITE_NOTES[pos];
+      }
+      if (foundMidi === null) return;
+
+      const hz = 440 * Math.pow(2, (foundMidi - 69) / 12);
+      const n = midiToNote(foundMidi);
+
+      document.getElementById('result-hz').textContent = hz < 100 ? hz.toFixed(2) : Math.round(hz);
+      document.getElementById('result-midi').textContent = foundMidi;
+      document.getElementById('result-period').textContent = (1000 / hz).toFixed(2) + ' ms';
+      document.getElementById('result-note').textContent = n.es + ' / ' + n.en + n.octave;
+      document.getElementById('result-cents').textContent = '+0 cents';
+      document.getElementById('result-midi2').textContent = foundMidi;
+      document.getElementById('inpHz').value = Math.round(hz);
+
+      lastMarkerHz = hz;
+      lastMarkerMidi = foundMidi;
+      drawChart(hz);
+      drawPiano(foundMidi);
+      drawInstruments(hz);
+    }
+    pCanvas.addEventListener('touchstart', handlePianoTouch, { passive: false });
+    pCanvas.addEventListener('touchmove',  handlePianoTouch, { passive: false });
+  }
+
+  // Touch en el canvas de instrumentos
+  if (iCanvas) {
+    function handleInstTouch(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const rect = iCanvas.getBoundingClientRect();
+      const xPos = touch.clientX - rect.left - 150;
+      const chartW = rect.width - 150;
+      if (xPos < 0 || xPos > chartW) return;
+      const logMin = Math.log10(20);
+      const logMax = Math.log10(20000);
+      hoverHz = Math.pow(10, logMin + (xPos / chartW) * (logMax - logMin));
+      hoverHz = Math.min(20000, Math.max(20, hoverHz));
+
+      const midiFloat = 69 + 12 * Math.log2(hoverHz / 440);
+      const midiRound = Math.round(midiFloat);
+      const cents = Math.round((midiFloat - midiRound) * 100);
+      const n = midiToNote(midiRound);
+
+      document.getElementById('result-hz').textContent = hoverHz < 100 ? hoverHz.toFixed(2) : Math.round(hoverHz);
+      document.getElementById('result-midi').textContent = midiRound;
+      document.getElementById('result-period').textContent = (1000 / hoverHz).toFixed(2) + ' ms';
+      document.getElementById('result-note').textContent = n.es + ' / ' + n.en + n.octave;
+      document.getElementById('result-cents').textContent = (cents >= 0 ? '+' : '') + cents + ' cents';
+      document.getElementById('result-midi2').textContent = midiRound;
+      document.getElementById('inpHz').value = Math.round(hoverHz);
+
+      drawChart(hoverHz);
+      drawPiano(midiRound);
+      drawInstruments(hoverHz);
+    }
+    iCanvas.addEventListener('touchstart', handleInstTouch, { passive: false });
+    iCanvas.addEventListener('touchmove',  handleInstTouch, { passive: false });
+    iCanvas.addEventListener('touchend', e => {
+      e.preventDefault();
+      lastMarkerHz = hoverHz || lastMarkerHz;
+      lastMarkerMidi = Math.round(69 + 12 * Math.log2(lastMarkerHz / 440));
+    }, { passive: false });
+  }
 }
 
 let lastMarkerHz = 440;
