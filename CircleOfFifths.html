@@ -643,27 +643,15 @@ function updatePanels() {
 
 // ── Audio engine (soundfont) ──────────────────────────────────────────────────
 const SOUNDFONT_BASE = './sounds/piano/';
-// Samples available: note name → file
-const SAMPLES = {
-  'C3':'C3','Cs3':'Ds3','D3':'Ds3','Ds3':'Ds3','E3':'Ds3',
-  'F3':'Fs3','Fs3':'Fs3','G3':'Fs3','Gs3':'A3','A3':'A3',
-  'As3':'A3','B3':'B3','C4':'C4','Cs4':'Ds4','D4':'Ds4',
-  'Ds4':'Ds4','E4':'Ds4','F4':'Fs4','Fs4':'Fs4','G4':'Fs4',
-  'Gs4':'A4','A4':'A4','As4':'A4','B4':'B4'
-};
-// MIDI note names for C3(48)..B4(71)
+
+// Una muestra por semitono — sin pitch shifting
 const MIDI_NAMES = [
   'C3','Cs3','D3','Ds3','E3','F3','Fs3','G3','Gs3','A3','As3','B3',
   'C4','Cs4','D4','Ds4','E4','F4','Fs4','G4','Gs4','A4','As4','B4'
 ];
-// Sample MIDI base notes
-const SAMPLE_MIDI = {
-  'C3':48,'Ds3':51,'Fs3':54,'A3':57,'B3':59,
-  'C4':60,'Ds4':63,'Fs4':66,'A4':69,'B4':71
-};
 
 let sfCtx = null;
-const sfBuffers = {}; // sample name → AudioBuffer
+const sfBuffers = {};
 let sfLoaded = false;
 let sfLoading = false;
 
@@ -676,11 +664,10 @@ async function loadSoundfonts() {
   sfLoading = true;
   try {
     sfCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const sampleNames = ['C3','Ds3','Fs3','A3','B3','C4','Ds4','Fs4','A4','B4'];
-    await Promise.all(sampleNames.map(async name => {
+    await Promise.all(MIDI_NAMES.map(async name => {
       try {
         const res = await fetch(SOUNDFONT_BASE + name + '.mp3');
-        if (!res.ok) throw new Error('Not found');
+        if (!res.ok) throw new Error(res.status);
         const buf = await res.arrayBuffer();
         sfBuffers[name] = await sfCtx.decodeAudioData(buf);
       } catch(e) {
@@ -695,31 +682,25 @@ async function loadSoundfonts() {
   sfLoading = false;
 }
 
-function playMidi(midi, delay = 0, volume = 0.7) {
+function playMidi(midi, delay = 0, volume = 0.65) {
   if (!sfCtx || !sfLoaded) return;
   const noteName = midiToNoteName(midi);
-  if (!noteName) return;
-  const sampleName = SAMPLES[noteName];
-  if (!sampleName || !sfBuffers[sampleName]) return;
-
-  const sampleMidi = SAMPLE_MIDI[sampleName];
-  const semitonesDiff = midi - sampleMidi;
-  const playbackRate = Math.pow(2, semitonesDiff / 12);
+  if (!noteName || !sfBuffers[noteName]) return;
 
   const src = sfCtx.createBufferSource();
-  src.buffer = sfBuffers[sampleName];
-  src.playbackRate.value = playbackRate;
+  src.buffer = sfBuffers[noteName];
+  src.playbackRate.value = 1; // sin pitch shifting — muestra exacta
 
   const gain = sfCtx.createGain();
   const now = sfCtx.currentTime + delay;
   gain.gain.setValueAtTime(0, now);
-  gain.gain.linearRampToValueAtTime(volume, now + 0.01);
-  gain.gain.exponentialRampToValueAtTime(0.001, now + 2.0);
+  gain.gain.linearRampToValueAtTime(volume, now + 0.015);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 2.2);
 
   src.connect(gain);
   gain.connect(sfCtx.destination);
   src.start(now);
-  src.stop(now + 2.1);
+  src.stop(now + 2.3);
 }
 
 function playChordMidis(midis) {
