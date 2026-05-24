@@ -71,6 +71,15 @@
   .legend-dot { width: 12px; height: 12px; border-radius: 50%; }
 
   /* Hint */
+  .btn-reset-sel {
+    font-family: 'Raleway', sans-serif;
+    font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    padding: 7px 20px; background: transparent;
+    border: 1px solid var(--border); border-radius: 2px;
+    color: var(--muted); cursor: pointer; transition: all 0.2s;
+  }
+  .btn-reset-sel:hover { border-color: var(--green); color: var(--green); background: var(--green-light); }
+
   .hint { text-align: center; font-size: 12px; color: #aaaaaa; letter-spacing: 2px; text-transform: uppercase; margin-top: 10px; }
 
   /* Info panels */
@@ -248,7 +257,10 @@
       <div class="legend-item"><div class="legend-dot" style="background:var(--orange)"></div>Tónica secundaria</div>
       <div class="legend-item"><div class="legend-dot" style="background:rgba(0,80,180,0.12);border:1.5px solid rgba(0,80,180,0.4)"></div>Vecinos directos</div>
     </div>
-    <div class="hint">Click para seleccionar tónica · Segundo click para comparar</div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:16px;margin-top:10px;flex-wrap:wrap">
+      <div class="hint" style="margin-top:0">Click para seleccionar tónica · Segundo click para comparar</div>
+      <button class="btn-reset-sel" onclick="resetSelection()">✕ Limpiar</button>
+    </div>
   </div>
 
   <!-- Panels info -->
@@ -876,6 +888,13 @@ function selectChordFromCell(panelIdx, rootName, type, cellEl) {
 }
 
 window.addEventListener('resize', () => { setTimeout(refreshPianos, 60); });
+
+function resetSelection() {
+  sel1 = null; sel2 = null;
+  activeChord1 = null; activeChord2 = null;
+  drawWheel();
+  updatePanels();
+}
 
 // ── Init ───────────────────────────────────────────────────────────────────────
 // Unregister any service workers that might cache this page
