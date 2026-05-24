@@ -723,23 +723,20 @@ function playMidi(midi, delay = 0, volume = 0.7) {
 }
 
 function playChordMidis(midis) {
-  if (!sfCtx) {
-    // Try to load on first interaction
-    loadSoundfonts().then(() => playChordMidis(midis));
+  if (!sfLoaded) {
+    console.log('Soundfont not ready yet, loading...');
+    loadSoundfonts().then(() => {
+      if (sfLoaded) midis.forEach((midi, i) => playMidi(midi, i * 0.06, 0.6));
+    });
     return;
   }
   if (sfCtx.state === 'suspended') sfCtx.resume();
-  // Arpegio: 60ms entre notas
   midis.forEach((midi, i) => playMidi(midi, i * 0.06, 0.6));
 }
 
-// Preload on page load
-window.addEventListener('load', () => {
-  // Trigger load on first user interaction to respect autoplay policy
-  document.addEventListener('click', function initSF() {
-    loadSoundfonts();
-    document.removeEventListener('click', initSF);
-  }, { once: true });
+// Load soundfonts as soon as page is ready
+document.addEventListener('DOMContentLoaded', () => {
+  loadSoundfonts();
 });
 
 // ── Piano ─────────────────────────────────────────────────────────────────────
