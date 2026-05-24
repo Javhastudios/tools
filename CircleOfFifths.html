@@ -744,19 +744,13 @@ function buildChord(rootName, type) {
   const intervals = CHORD_INTERVALS[type] || [0,4,7];
   // Anchor root to octave 3 (MIDI 48=C3). Notes go up from there.
   const rootMidi = 48 + rootSemi; // C3=48, always start in octave 3
-  const midis = intervals.map(i => {
-    let m = rootMidi + i;
-    // If note falls below root (shouldn't happen with our intervals) push up
-    if (m < rootMidi) m += 12;
-    return m;
-  });
+  // Clamp to C3-B4 range (MIDI 48-71) — transpose down octave if needed
+  const clamp = m => m > 71 ? m - 12 : m < 48 ? m + 12 : m;
+  const midis = intervals.map(i => clamp(rootMidi + i));
   const hasNative7 = type === 'dom';
-  // Optional 7th midi
   let seventhMidi = null;
   if (!hasNative7 && SEVENTH_INTERVAL[type] !== undefined) {
-    let m = rootMidi + SEVENTH_INTERVAL[type];
-    if (m < rootMidi) m += 12;
-    seventhMidi = m;
+    seventhMidi = clamp(rootMidi + SEVENTH_INTERVAL[type]);
   }
   return { midis, seventhMidi, hasNative7, rootName, type };
 }
