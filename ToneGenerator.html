@@ -72,7 +72,7 @@
 
   /* Waveform selector */
   .wave-row {
-    display: flex; gap: 8px; margin-bottom: 24px; justify-content: center;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 24px;
   }
   .wave-btn {
     flex: 1; padding: 10px 4px;
@@ -138,6 +138,72 @@
   }
   .sweep-btn:hover { border-color: var(--green); color: var(--green); background: var(--green-light); }
   .sweep-btn.active { border-color: var(--orange); color: var(--orange); background: rgba(224,85,0,0.08); }
+
+  /* Medidor de amplitud */
+  .meter-wrap {
+    margin-bottom: 24px;
+    padding: 14px 16px;
+    background: var(--bg); border: 1px solid var(--border); border-radius: 3px;
+  }
+  .meter-header {
+    display: flex; justify-content: space-between; align-items: baseline;
+    margin-bottom: 10px;
+  }
+  .meter-title {
+    font-size: 10px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: var(--muted);
+  }
+  .meter-vals {
+    display: flex; gap: 16px;
+  }
+  .meter-val-block { text-align: right; }
+  .meter-val-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: #aaaaaa; display: block;
+  }
+  .meter-val-num {
+    font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums;
+    color: var(--green);
+  }
+  .meter-val-num.peak-warn { color: var(--orange); }
+  .meter-val-num.peak-clip { color: #cc0000; }
+
+  .meter-bar-wrap {
+    position: relative; height: 18px;
+    background: #e0e0e4; border-radius: 2px; overflow: visible;
+  }
+  /* gradient track */
+  .meter-bar-track {
+    position: absolute; inset: 0; border-radius: 2px;
+    background: linear-gradient(to right,
+      #0f6151 0%, #0f6151 60%,
+      #7ab800 60%, #7ab800 80%,
+      #e05500 80%, #e05500 95%,
+      #cc0000 95%, #cc0000 100%
+    );
+    opacity: 0.18;
+  }
+  .meter-bar-rms {
+    position: absolute; top: 0; left: 0; height: 100%;
+    background: linear-gradient(to right, #0f6151, #7ab800 80%, #e05500);
+    border-radius: 2px; transition: width 0.05s linear;
+    min-width: 2px;
+  }
+  .meter-bar-peak {
+    position: absolute; top: -2px; width: 3px; height: calc(100% + 4px);
+    background: var(--orange); border-radius: 1px;
+    transition: left 0.05s linear;
+  }
+  .meter-bar-peak.clip { background: #cc0000; }
+
+  /* Scale ticks */
+  .meter-scale {
+    display: flex; justify-content: space-between;
+    margin-top: 4px; padding: 0 0;
+  }
+  .meter-scale span {
+    font-size: 8px; color: #aaaaaa; font-variant-numeric: tabular-nums;
+  }
 
   /* Visualizer canvas */
   .viz-wrap {
@@ -245,6 +311,46 @@
           <svg width="40" height="20" viewBox="0 0 40 20"><path d="M0,10 L10,3 L20,17 L30,3 L40,10" fill="none" stroke="currentColor" stroke-width="2"/></svg>
           Triángulo
         </button>
+        <button class="wave-btn" id="wWhite" onclick="setWave('white', this)">
+          <svg width="40" height="20" viewBox="0 0 40 20"><path d="M0,10 L2,5 L4,14 L6,8 L8,13 L10,4 L12,16 L14,9 L16,12 L18,3 L20,15 L22,7 L24,11 L26,6 L28,14 L30,4 L32,13 L34,8 L36,15 L38,5 L40,10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          R. Blanco
+        </button>
+        <button class="wave-btn" id="wPink" onclick="setWave('pink', this)">
+          <svg width="40" height="20" viewBox="0 0 40 20"><path d="M0,10 L2,7 L4,12 L6,8 L8,11 L10,6 L12,13 L14,9 L16,11 L18,7 L20,12 L22,8 L24,11 L26,7 L28,13 L30,8 L32,11 L34,7 L36,12 L38,9 L40,10" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          R. Rosa
+        </button>
+      </div>
+    </div>
+
+    <!-- Medidor Peak / RMS / LUFS -->
+    <div class="meter-wrap">
+      <div class="meter-header">
+        <span class="meter-title">Nivel</span>
+        <div class="meter-vals">
+          <div class="meter-val-block">
+            <span class="meter-val-label">Peak</span>
+            <span class="meter-val-num" id="mPeak">−∞</span>
+            <span class="meter-val-label" style="display:inline;font-size:8px"> dBFS</span>
+          </div>
+          <div class="meter-val-block">
+            <span class="meter-val-label">RMS</span>
+            <span class="meter-val-num" id="mRms">−∞</span>
+            <span class="meter-val-label" style="display:inline;font-size:8px"> dBFS</span>
+          </div>
+          <div class="meter-val-block">
+            <span class="meter-val-label">LUFS-M</span>
+            <span class="meter-val-num" id="mLufs">−∞</span>
+            <span class="meter-val-label" style="display:inline;font-size:8px"> LU</span>
+          </div>
+        </div>
+      </div>
+      <div class="meter-bar-wrap" id="meterBarWrap">
+        <div class="meter-bar-track"></div>
+        <div class="meter-bar-rms" id="mBarRms" style="width:0%"></div>
+        <div class="meter-bar-peak" id="mBarPeak" style="left:0%"></div>
+      </div>
+      <div class="meter-scale">
+        <span>−60</span><span>−48</span><span>−36</span><span>−24</span><span>−18</span><span>−12</span><span>−6</span><span>0</span>
       </div>
     </div>
 
@@ -359,21 +465,55 @@ function updateUI(hz) {
 // ── Audio ─────────────────────────────────────────────────────────────────────
 function dbfsToGain(db) { return Math.pow(10, db / 20); }
 
+// Pink noise state (b0..b6 for Paul Kellet's algorithm)
+let pinkB = [0,0,0,0,0,0,0];
+
 function startAudio() {
   actx = new (window.AudioContext || window.webkitAudioContext)();
   gainNode = actx.createGain();
   gainNode.gain.value = dbfsToGain(currentDbfs);
   gainNode.connect(actx.destination);
 
-  oscillator = actx.createOscillator();
-  oscillator.type = currentWave;
-  oscillator.frequency.value = currentHz;
-  oscillator.connect(gainNode);
-  oscillator.start();
+  if (currentWave === 'white' || currentWave === 'pink') {
+    const bufferSize = 4096;
+    const noiseNode = actx.createScriptProcessor(bufferSize, 1, 1);
+    pinkB = [0,0,0,0,0,0,0];
+    noiseNode.onaudioprocess = (e) => {
+      const out = e.outputBuffer.getChannelData(0);
+      for (let i = 0; i < bufferSize; i++) {
+        const white = Math.random() * 2 - 1;
+        if (currentWave === 'white') {
+          out[i] = white;
+        } else {
+          // Paul Kellet pink noise approximation
+          pinkB[0] = 0.99886 * pinkB[0] + white * 0.0555179;
+          pinkB[1] = 0.99332 * pinkB[1] + white * 0.0750759;
+          pinkB[2] = 0.96900 * pinkB[2] + white * 0.1538520;
+          pinkB[3] = 0.86650 * pinkB[3] + white * 0.3104856;
+          pinkB[4] = 0.55000 * pinkB[4] + white * 0.5329522;
+          pinkB[5] = -0.7616 * pinkB[5] - white * 0.0168980;
+          out[i] = (pinkB[0]+pinkB[1]+pinkB[2]+pinkB[3]+pinkB[4]+pinkB[5]+pinkB[6]+white*0.5362) * 0.11;
+          pinkB[6] = white * 0.115926;
+        }
+      }
+    };
+    noiseNode.connect(gainNode);
+    oscillator = noiseNode; // reuse ref for stopAudio
+  } else {
+    oscillator = actx.createOscillator();
+    oscillator.type = currentWave;
+    oscillator.frequency.value = currentHz;
+    oscillator.connect(gainNode);
+    oscillator.start();
+  }
 }
 
 function stopAudio() {
-  if (oscillator) { oscillator.stop(); oscillator.disconnect(); oscillator = null; }
+  if (oscillator) {
+    try { oscillator.stop(); } catch(e) {} // OscillatorNode only
+    oscillator.disconnect();
+    oscillator = null;
+  }
   if (gainNode) { gainNode.disconnect(); gainNode = null; }
   if (actx) { actx.close(); actx = null; }
 }
@@ -383,23 +523,149 @@ function togglePlay() {
     stopAudio();
     isPlaying = false;
     stopSweep();
+    if (meterRaf) { cancelAnimationFrame(meterRaf); meterRaf = null; }
+    analyser = null; lufsAnalyser = null;
+    peakHold = -Infinity;
+    drawMeter(0);
     document.getElementById('playBtn').textContent = '▶ REPRODUCIR';
     document.getElementById('playBtn').classList.remove('playing');
   } else {
     startAudio();
+    setupMeter();
     isPlaying = true;
     document.getElementById('playBtn').textContent = '■ DETENER';
     document.getElementById('playBtn').classList.add('playing');
     if (sweepActive) startSweepLoop();
+    peakHold = -Infinity;
+    peakHoldTimer = 0;
+    if (meterRaf) cancelAnimationFrame(meterRaf);
+    meterRaf = requestAnimationFrame(drawMeter);
   }
   drawViz();
+}
+
+// ── Medidor Peak / RMS / LUFS ─────────────────────────────────────────────────
+let analyser = null;
+let lufsFilter1 = null; // K-weighting stage 1: high-shelf
+let lufsFilter2 = null; // K-weighting stage 2: high-pass
+let lufsAnalyser = null;
+let peakHold = -Infinity;
+let peakHoldTimer = 0;
+const PEAK_HOLD_MS = 2000;
+let meterRaf = null;
+
+function dbFS(linear) {
+  return linear > 0 ? 20 * Math.log10(linear) : -Infinity;
+}
+
+function pctFromDb(db) {
+  // Map -60..0 dBFS → 0..100%
+  return Math.max(0, Math.min(100, ((db + 60) / 60) * 100));
+}
+
+function setupMeter() {
+  if (!actx) return;
+
+  // Main analyser for peak & RMS
+  analyser = actx.createAnalyser();
+  analyser.fftSize = 2048;
+  analyser.smoothingTimeConstant = 0;
+  gainNode.connect(analyser);
+
+  // K-weighting for LUFS-M (simplified ITU-R BS.1770)
+  // Stage 1: high-shelf +4dB @ ~1681 Hz
+  lufsFilter1 = actx.createBiquadFilter();
+  lufsFilter1.type = 'highshelf';
+  lufsFilter1.frequency.value = 1681.974450955533;
+  lufsFilter1.gain.value = 3.999843853973347;
+
+  // Stage 2: high-pass @ ~38.13 Hz
+  lufsFilter2 = actx.createBiquadFilter();
+  lufsFilter2.type = 'highpass';
+  lufsFilter2.frequency.value = 38.13547087613982;
+  lufsFilter2.Q.value = 0.5003270373238773;
+
+  lufsAnalyser = actx.createAnalyser();
+  lufsAnalyser.fftSize = 2048;
+  lufsAnalyser.smoothingTimeConstant = 0;
+
+  gainNode.connect(lufsFilter1);
+  lufsFilter1.connect(lufsFilter2);
+  lufsFilter2.connect(lufsAnalyser);
+}
+
+function drawMeter(now) {
+  if (!analyser || !isPlaying) {
+    // Reset display
+    document.getElementById('mBarRms').style.width = '0%';
+    document.getElementById('mBarPeak').style.left = '0%';
+    document.getElementById('mPeak').textContent = '−∞';
+    document.getElementById('mRms').textContent = '−∞';
+    document.getElementById('mLufs').textContent = '−∞';
+    document.getElementById('mPeak').className = 'meter-val-num';
+    document.getElementById('mBarPeak').className = 'meter-bar-peak';
+    return;
+  }
+
+  const buf = new Float32Array(analyser.fftSize);
+  analyser.getFloatTimeDomainData(buf);
+
+  // Peak
+  let peak = 0;
+  for (let i = 0; i < buf.length; i++) {
+    const abs = Math.abs(buf[i]);
+    if (abs > peak) peak = abs;
+  }
+  const peakDb = dbFS(peak);
+
+  // RMS
+  let sum = 0;
+  for (let i = 0; i < buf.length; i++) sum += buf[i] * buf[i];
+  const rms = Math.sqrt(sum / buf.length);
+  const rmsDb = dbFS(rms);
+
+  // LUFS-M (K-weighted RMS, ~400ms window approximated by analyser buffer)
+  const lBuf = new Float32Array(lufsAnalyser.fftSize);
+  lufsAnalyser.getFloatTimeDomainData(lBuf);
+  let lSum = 0;
+  for (let i = 0; i < lBuf.length; i++) lSum += lBuf[i] * lBuf[i];
+  const lufsM = dbFS(Math.sqrt(lSum / lBuf.length)) - 0.691; // offset per BS.1770
+
+  // Peak hold
+  if (peakDb > peakHold) {
+    peakHold = peakDb;
+    peakHoldTimer = now;
+  } else if (now - peakHoldTimer > PEAK_HOLD_MS) {
+    peakHold = peakDb;
+  }
+
+  // Update bar
+  const rmsW = pctFromDb(rmsDb);
+  const peakL = pctFromDb(peakHold);
+  document.getElementById('mBarRms').style.width = rmsW + '%';
+  document.getElementById('mBarPeak').style.left = Math.min(97, peakL) + '%';
+
+  // Colour peak marker
+  const peakEl = document.getElementById('mBarPeak');
+  peakEl.className = 'meter-bar-peak' + (peakHold >= 0 ? ' clip' : '');
+
+  // Update numbers
+  const fmt = (v) => isFinite(v) ? v.toFixed(1) : '−∞';
+  const peakNumEl = document.getElementById('mPeak');
+  peakNumEl.textContent = fmt(peakHold);
+  peakNumEl.className = 'meter-val-num' + (peakHold >= -3 && peakHold < 0 ? ' peak-warn' : peakHold >= 0 ? ' peak-clip' : '');
+  document.getElementById('mRms').textContent = fmt(rmsDb);
+  document.getElementById('mLufs').textContent = fmt(lufsM);
+
+  meterRaf = requestAnimationFrame(drawMeter);
 }
 
 // ── Frecuencia ─────────────────────────────────────────────────────────────────
 function setHz(hz) {
   hz = Math.max(20, Math.min(20000, hz));
   currentHz = hz;
-  if (oscillator) oscillator.frequency.setTargetAtTime(hz, actx.currentTime, 0.01);
+  const isNoise = currentWave === 'white' || currentWave === 'pink';
+  if (oscillator && !isNoise) oscillator.frequency.setTargetAtTime(hz, actx.currentTime, 0.01);
   updateUI(hz);
 }
 
@@ -410,8 +676,26 @@ function applyPreset(hz) { setHz(hz); }
 
 // ── Onda ──────────────────────────────────────────────────────────────────────
 function setWave(type, btn) {
+  const wasPlaying = isPlaying;
+  const prevWave = currentWave;
   currentWave = type;
-  if (oscillator) oscillator.type = type;
+
+  const isNoise = type === 'white' || type === 'pink';
+  const wasNoise = prevWave === 'white' || prevWave === 'pink';
+
+  if (wasPlaying && (isNoise || wasNoise)) {
+    // Always rebuild graph when noise is involved (any direction)
+    stopAudio();
+    startAudio();
+    setupMeter(); // reconnect analyser after graph rebuild
+    peakHold = -Infinity; peakHoldTimer = 0;
+    if (meterRaf) cancelAnimationFrame(meterRaf);
+    meterRaf = requestAnimationFrame(drawMeter);
+  } else if (wasPlaying && oscillator && oscillator.type !== undefined) {
+    // Pure oscillator-to-oscillator: just change type, no rebuild needed
+    oscillator.type = type;
+  }
+
   document.querySelectorAll('.wave-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 }
@@ -501,21 +785,30 @@ function drawViz() {
     ctx.strokeStyle = '#0f6151';
     ctx.lineWidth = 2;
 
-    for (let i = 0; i <= w; i++) {
-      const phase = (i / w) * cycles * 2 * Math.PI + t * currentHz * 0.1;
-      let y;
-      if (currentWave === 'sine') {
-        y = Math.sin(phase);
-      } else if (currentWave === 'square') {
-        y = Math.sin(phase) >= 0 ? 1 : -1;
-      } else if (currentWave === 'sawtooth') {
-        y = ((phase / Math.PI) % 2) - 1;
-        if (y > 1) y -= 2;
-      } else { // triangle
-        y = (2 / Math.PI) * Math.asin(Math.sin(phase));
+    if (currentWave === 'white' || currentWave === 'pink') {
+      // Draw noise as random short segments
+      for (let i = 0; i <= w; i++) {
+        const y = (Math.random() * 2 - 1) * amp;
+        const px = (h/2) - y * (h/2);
+        i === 0 ? ctx.moveTo(i, px) : ctx.lineTo(i, px);
       }
-      const px = (h/2) - y * (h/2) * amp;
-      i === 0 ? ctx.moveTo(i, px) : ctx.lineTo(i, px);
+    } else {
+      for (let i = 0; i <= w; i++) {
+        const phase = (i / w) * cycles * 2 * Math.PI + t * currentHz * 0.1;
+        let y;
+        if (currentWave === 'sine') {
+          y = Math.sin(phase);
+        } else if (currentWave === 'square') {
+          y = Math.sin(phase) >= 0 ? 1 : -1;
+        } else if (currentWave === 'sawtooth') {
+          y = ((phase / Math.PI) % 2) - 1;
+          if (y > 1) y -= 2;
+        } else {
+          y = (2 / Math.PI) * Math.asin(Math.sin(phase));
+        }
+        const px = (h/2) - y * (h/2) * amp;
+        i === 0 ? ctx.moveTo(i, px) : ctx.lineTo(i, px);
+      }
     }
     ctx.stroke();
     vizRaf = requestAnimationFrame(frame);
