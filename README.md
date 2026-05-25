@@ -29,3 +29,9 @@ HTML5 · CSS3 · JavaScript puro · Web Audio API — sin frameworks, sin depend
 ## Autor
 
 **Javhastudios** — [javhastudios.com](https://www.javhastudios.com)
+
+---
+
+## Version y Fecha
+
+**V 1.0 - 24 Mayo 2026** —
