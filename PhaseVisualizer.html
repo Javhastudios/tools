@@ -150,6 +150,27 @@
     text-transform: uppercase; color: var(--muted); opacity: 0.5;
     text-align: center; padding: 4px 0;
   }
+
+  /* PANEL ONDA — grid 2 canvas */
+  .wave-grid {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 12px;
+    align-items: start;
+  }
+  @media(max-width:600px){ .wave-grid{ grid-template-columns: 1fr; } }
+  .wave-col-label {
+    font-size: 9px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: rgba(255,255,255,0.3);
+    margin-bottom: 4px;
+  }
+  .gd-ms-badge {
+    display: inline-block; margin-top: 6px;
+    background: var(--dark); border-radius: 3px;
+    padding: 4px 10px; font-size: 13px; font-weight: 700;
+    font-variant-numeric: tabular-nums; color: #e0a800;
+    letter-spacing: 0.5px;
+  }
 </style>
 </head>
 <body>
@@ -257,14 +278,37 @@
   <!-- CANVAS ONDA -->
   <div class="panel">
     <div class="panel-title">Forma de Onda — Original vs Filtrada</div>
-    <canvas id="waveCompCanvas" height="200"></canvas>
-    <div class="legend" style="margin-top:10px">
-      <div class="legend-item">
-        <div class="legend-dot" style="background:#1db97a"></div> Original
+    <div class="wave-grid">
+
+      <!-- IZQUIERDA: zoom desplazamiento temporal -->
+      <div>
+        <div class="wave-col-label">Desplazamiento temporal</div>
+        <canvas id="waveZoomCanvas" height="200"></canvas>
+        <div class="legend" style="margin-top:8px">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#1db97a"></div> Original
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#e0a800"></div> Filtrada
+          </div>
+        </div>
+        <div class="gd-ms-badge" id="gd-ms-badge">— ms</div>
       </div>
-      <div class="legend-item">
-        <div class="legend-dot" style="background:#e0a800"></div> Filtrada (HPF)
+
+      <!-- DERECHA: onda completa -->
+      <div>
+        <div class="wave-col-label">Señal completa (50 ms)</div>
+        <canvas id="waveCompCanvas" height="200"></canvas>
+        <div class="legend" style="margin-top:8px">
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#1db97a"></div> Original
+          </div>
+          <div class="legend-item">
+            <div class="legend-dot" style="background:#e0a800"></div> Filtrada (HPF)
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 
@@ -658,6 +702,8 @@ const wpillFc     = document.getElementById('wpill-fc');
 const wpillShift  = document.getElementById('wpill-shift');
 const waveCV      = document.getElementById('waveCompCanvas');
 const waveCtx     = waveCV.getContext('2d');
+const zoomCV      = document.getElementById('waveZoomCanvas');
+const zoomCtx     = zoomCV.getContext('2d');
 
 const WAVE_SR   = 48000;
 const WAVE_DUR  = 0.05;   // 50ms de señal
@@ -796,6 +842,9 @@ function drawWaveComp() {
   }
   waveCtx.stroke();
 
+  // Zoom temporal
+  drawWaveZoom(orig, filt, preset.fund);
+
   // Pills
   const fund = preset.fund;
   wpillFund.textContent = 'Fund: ' + fund + ' Hz';
@@ -812,6 +861,127 @@ function drawWaveComp() {
     wpillShift.textContent = 'Δ Fase: 0°';
     wpillShift.style.background = '#e0a800';
     wpillShift.style.borderColor = '#e0a800';
+  }
+}
+
+
+// ─── Zoom desplazamiento temporal ──────────────
+function drawWaveZoom(orig, filt, fund) {
+  // Mostrar ~3 períodos — suficiente para ver el retardo claramente
+  const showMs   = Math.max(6, Math.ceil(3500 / fund));
+  const showSamp = Math.min(WAVE_SAMP, Math.round(showMs * WAVE_SR / 1000));
+
+  const W = zoomCV.parentElement.clientWidth - 0;
+  zoomCV.width = W;
+  const H = zoomCV.height;
+  const midY = H / 2;
+  const scaleY = H / 2 - 24;
+  const padL = 10, padR = 10;
+  const plotW = W - padL - padR;
+
+  zoomCtx.fillStyle = '#1e1e22';
+  zoomCtx.fillRect(0, 0, W, H);
+
+  // Calcular retardo en samples desde la fase
+  const gdBadge  = document.getElementById('gd-ms-badge');
+  let gdSamp = 0, gdMs = 0;
+  if (waveFc > 0) {
+    const shiftDeg = calcPhaseShift(orig, filt, fund);
+    const shiftRad = shiftDeg * (Math.PI / 180);
+    gdSamp = Math.abs(shiftRad * WAVE_SR / (2 * Math.PI * fund));
+    gdMs   = gdSamp / WAVE_SR * 1000;
+  }
+
+  const dx = plotW / showSamp;
+  const msTotal = showSamp / WAVE_SR * 1000;
+
+  // Eje horizontal
+  zoomCtx.strokeStyle = 'rgba(255,255,255,0.07)';
+  zoomCtx.lineWidth = 1;
+  zoomCtx.beginPath();
+  zoomCtx.moveTo(padL, midY); zoomCtx.lineTo(padL + plotW, midY);
+  zoomCtx.stroke();
+
+  // Marcas de tiempo cada ms
+  for (let ms = 0; ms <= Math.ceil(msTotal); ms++) {
+    const x = padL + (ms / msTotal) * plotW;
+    zoomCtx.strokeStyle = 'rgba(255,255,255,0.06)';
+    zoomCtx.lineWidth = 1;
+    zoomCtx.beginPath();
+    zoomCtx.moveTo(x, 10); zoomCtx.lineTo(x, H - 16);
+    zoomCtx.stroke();
+    zoomCtx.fillStyle = 'rgba(255,255,255,0.2)';
+    zoomCtx.font = '700 8px Raleway, sans-serif';
+    zoomCtx.textAlign = 'center';
+    zoomCtx.fillText(ms + 'ms', x, H - 4);
+  }
+
+  // ── Original (verde) — posición real ──────────
+  zoomCtx.strokeStyle = '#1db97a';
+  zoomCtx.lineWidth = 2;
+  zoomCtx.beginPath();
+  for (let i = 0; i < showSamp; i++) {
+    const x = padL + i * dx;
+    const y = midY - orig[i] * scaleY;
+    i === 0 ? zoomCtx.moveTo(x, y) : zoomCtx.lineTo(x, y);
+  }
+  zoomCtx.stroke();
+
+  // ── Filtrada (amarillo) — desplazada gdSamp hacia la derecha ──
+  // Construimos la señal desplazada: shifted[i] = orig[i - gdSamp]
+  // Lo hacemos directamente en el dibujado: el sample i se pinta en x = padL + (i + gdSamp) * dx
+  zoomCtx.strokeStyle = '#e0a800';
+  zoomCtx.lineWidth = 2;
+  zoomCtx.beginPath();
+  let firstPt = true;
+  for (let i = 0; i < showSamp; i++) {
+    const xShifted = padL + (i + gdSamp) * dx;
+    if (xShifted > padL + plotW) break; // salir si nos pasamos
+    const y = midY - orig[i] * scaleY;  // misma forma, desplazada en X
+    firstPt ? zoomCtx.moveTo(xShifted, y) : zoomCtx.lineTo(xShifted, y);
+    firstPt = false;
+  }
+  zoomCtx.stroke();
+
+  // ── Flecha doble mostrando el retardo ─────────
+  if (gdSamp > 0.5) {
+    const arrowY  = midY - scaleY * 0.75;
+    const x0 = padL + 2;
+    const x1 = padL + gdSamp * dx;
+    // Línea horizontal
+    zoomCtx.strokeStyle = '#e0a800cc';
+    zoomCtx.lineWidth = 1.5;
+    zoomCtx.setLineDash([3, 3]);
+    zoomCtx.beginPath();
+    zoomCtx.moveTo(x0, arrowY); zoomCtx.lineTo(x1, arrowY);
+    zoomCtx.stroke();
+    zoomCtx.setLineDash([]);
+    // Puntas
+    [x0, x1].forEach((x, idx) => {
+      const dir = idx === 0 ? 1 : -1;
+      zoomCtx.beginPath();
+      zoomCtx.moveTo(x, arrowY);
+      zoomCtx.lineTo(x + dir * 6, arrowY - 4);
+      zoomCtx.lineTo(x + dir * 6, arrowY + 4);
+      zoomCtx.closePath();
+      zoomCtx.fillStyle = '#e0a800cc';
+      zoomCtx.fill();
+    });
+    // Etiqueta
+    zoomCtx.fillStyle = '#e0a800';
+    zoomCtx.font = '700 9px Raleway, sans-serif';
+    zoomCtx.textAlign = 'center';
+    zoomCtx.fillText(gdMs.toFixed(2) + ' ms', (x0 + x1) / 2, arrowY - 7);
+  }
+
+  // Badge de retardo
+  if (waveFc > 0) {
+    const shiftDeg = calcPhaseShift(orig, filt, fund);
+    gdBadge.textContent = 'Retardo: ' + gdMs.toFixed(2) + ' ms';
+    gdBadge.style.color = Math.abs(shiftDeg) > 90 ? '#e84040' : Math.abs(shiftDeg) > 45 ? '#e0a800' : '#1db97a';
+  } else {
+    gdBadge.textContent = 'Sin filtro';
+    gdBadge.style.color = 'rgba(255,255,255,0.3)';
   }
 }
 
