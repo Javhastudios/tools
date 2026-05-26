@@ -104,6 +104,30 @@
     font-variant-numeric: tabular-nums;
   }
 
+  #drop-zone {
+    width: 100%; max-width: 900px;
+    border: 1.5px dashed var(--border); border-radius: 4px;
+    padding: 10px 16px; margin: 0 auto 20px; text-align: center;
+    cursor: pointer; transition: border-color 0.2s, background 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 12px;
+    flex-wrap: wrap;
+  }
+  #drop-zone:hover, #drop-zone.drag-over {
+    border-color: var(--green); background: rgba(15,97,81,0.06);
+  }
+  #drop-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted); cursor: pointer;
+  }
+  #clear-audio {
+    font-family: 'Raleway', sans-serif; font-size: 10px; font-weight: 700;
+    letter-spacing: 2px; text-transform: uppercase;
+    background: transparent; border: 1.5px solid var(--border);
+    border-radius: 3px; padding: 4px 10px; cursor: pointer;
+    color: var(--muted); transition: border-color 0.2s;
+  }
+  #clear-audio:hover { border-color: #e84040; color: #e84040; }
+
   .footer {
     font-size: 10px; font-weight: 600; letter-spacing: 2px;
     color: var(--muted); text-transform: uppercase; margin-top: 32px;
@@ -122,6 +146,12 @@
   <a href="https://www.javhastudios.com" target="_blank">
     <img class="logo-img" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFoAAABaCAYAAAA4qEECAAAK00lEQVR4nO2cf5AcRRXHP5ccIQKxAcOPECRgMEECEYEKQkhUQAiYSHUBEQWBRkFSpioiQRAiPyuCQBU/xEAUaAxRFKpoEUpCMAlgRAJYBBOg0ADKj4BYJTSEEuVy5x+vu2Zub3dvZ25295Kab9XW7Oz0vH7znTfd771+s1CiRIkSJUqUKFGiRIkSJUqUKFECAGX0VGX0oe3WY1PAkAGe/y6wVBm9QBm9YxEKba4YENHeutWAA2YBa5TR5xSh1OaIgVo0wIKw3RG4Rhn9nDL6+ALkblboKEKIMvoRYCrwX2DL8PMy4EJv3aoi+tjUUYRFQ2LVnUA3sBE4HHhcGX2rMnq3gvrZZFGIRQMoo18AxiFED0HIHhoOvwdc7a27vKj+NjUUZdEAt4Rtd9gOBXqALmAEcJky+iVl9NcL7HOTQZEWvRPwHLA9QnBadg9i4Z1h/4/I+P1IUf0PdhRGNIAy+sfAbMSKO6s06UZIj0PKncDF3rq/FanHYETRRO8LrEaGpEqrTmNjaNOBeCrXAld663yR+gwm5BqjldEfrfa7t24NcF/Y7a7WJmAoQnIX4g6eDzyrjD4zjz6bAjITrYweBeg6TW4K20aelk6SCXM0sFAZ/ZQy+qiseg125LHomcDHax301j0IPEXi4vWHDhL/uws4AFiijP6NMnqfHPoNSuQh+nTgzX7a3JxTl07k5nQDxwKrldHXKaN3yCpMGT1WGT291jDXalTzDGpCGT0JmAi83k/Tu4CLEcuPAUyjiB5J9FzmACcpo+d7666r0GcksDMwHgmWPgmMBcaEj/XW3Z+h76YhE9HAcWG7oV4jb917ymgLXER2otO6Rf97JHCtMvoU4EFgT2D38BlZ4/w/e+tOz9FvU5CV6CPDtp5HEXE78D1gOPVdvXpIj989wGfCpxLdqc8wJE8+M0d/TUPDlqaM3guYEHa36K+9t+5lwIbdRm5MPQxBhpQ4YXaRkJ8+PizsG2/dSwPss1Bksej9SAge0V/jMAmtCbtFBUZDqG0c8am50lt3T0H9FYYsRB+Q+r5d+kAg9WRgb2RyGgd8AtgKIaDI5FU1xHngdeCKJveVC1kI2DP1fZf0AW/du8B/gFORCXNfYGvEwgoN82sghvyjgSeU0Se2oM9MyEJ0evF1j8qD3jrrrRtBbx+6K69iOdCBkD0euFMZvVwZfXAL+6+LLERvm/peM2Lz1s0CvoIk+ztpPdlxhecLwGPKaKuMHtNCHaqiIaKV0duQrAUC7BWCharw1t0F7A+spfVkRw8khv+nAWuV0Re1UIc+yGLR0ZXqQpL7k+o19tat89btCyyh9WRD7xWebYBL27nC0xDR3roNyGQHiU/cUIbNW3c08GvaQ3YMeCLhewCLlNErldFTW6lIFot+O2yjF/HlRk/01p0I/Ir2kA29I8yNwGTgEWX0L5TRe9Y9syBkITomkjoQZXdXRjcc5nrrvgo8QPvIht7jdw/wNaTCan6zs3xZiK4W5c3O0pm37pggJ6ZD24X0Cs9w4AJkhecbzeowC9GPh20HSd5hijL62Ix9Hodk/6KMdiI9fu8K3KKMXqWMPqLojrIQ/TSwniQKi/hhlg7DivesLOc0GZUrPJOAh5TRd4dEWmGdNAxl9GLgJJKkfNxe4a27IKOsu4ATqF2aENFqq48r9EORFfrrket7ZyBCsyZ77qg4L66GfD/Hguo5JNFjT402MVnUys8WqevaEsmp/10Z/d0QuOVC5oSPMvpJ4ECS2rpIxtvAJG/dugyy5gGXU92q42+rgAtJcs21bkozEFd4tgI+Aqz01vW3jFcVeYg+AVkTTBcxxu8vA5O9dW80KEsBzwOj6L3kFeW9BhzorftnVj0HGzLnib11dwPLESKiPxy/7wH8QRm9e4OyPLAw7HantkOBD4DpmwPJkD8hP4fk0Y6PcpwcxyI54SkNylqEhPdx5o86zfTWPZNTv0GHXER769Yikxn0Djwi2TsAjyqj5zYg62VgadiNT8gcb919NU4ZNFBGf7bRtrmXmLx1NwCLEXI/TB1KR31XK6OXKaMnVJ5fgbjGNwy4PsgetFBGH6aMXo4EOQ2h4clQGT3NW7ekyu8PA59DyE6vjveQjLddwA1I1X+fKqfw6sU/gPu9dTMa1amVCLmQGcAZyPVmih2yEH0UMNZbt6DKsceBg+hLNvT2Tt4Gfgb81Fv3YoWMm4EfeOv+1ahOrYAyejJwPBJcjQ4//9Jbd1IWOVkjw1uBFd66xVWOrQA+j1hvTNpEVFb8fwDcjww9y71172XRo5kILueBSL79GJJalohnvHX7ZZWbleiPAU8CZ3nrllY5fgdSdgC9LTmiknCAVxF38QHgyVYXvoQCyrHAIcChSK5jdKpJD/KkDkMMZH9v3fNZ+8kTsMwA7gWmeutWVjl+LnBV2K1m3ZCM3x30npDfRwKYNcgNfRZYnyXarKP39sBOCInjkAXmiQjJO1fRL/1WQqxNOdVbtyhP/7lqLpTRVwHnAkd66x6qcvwQ4DZk6R/qJ47SpV2VTwBIPuTfwFtIufCbYX9D+HSRrH4PRepJtkJW7UciruYopOhnWySUrkS88ZCQGxF1v9Vb980a19Avche3KKMfAKYhdW6312hzDX397WpkRqQvOL5UVHQBTiyGjHIriU0jDn8veOsGlDIdiB99NPKY22Dh1drMRSaWZYjCcRmp1upKR6pdJ8ljG8mJ53Y1+Int4/lxCOhM9VOL5PTbYwMu/x2QtSijd0Wya7sAK4AzKt22VFuNZOFiDV/6wltRNpYVuXPt1TDgC1RG742QvCPwDnC+t25hnfYzgbOBdPjaRf1K0VYjDhlrvHUTixBY1L8bTAR+j0w8IO7aXG/d03XOORI4C/gSSa45PuLtJj2WAB/mrVtRhMAiX1GeADyEzPARNyGP3qt1zhuHLPvPBD6VOtQu0uOQYYt8NaPoN2fHIO+YjCdReANC+I3eulf6Of9wJNydhryfksZG+vrdRSNa8rvABG/da0UJLnwSCsmXe5D/60j/Ucr7yJrjwvAXQfVkbA0cDExHwvpPpw7nffmoEUTjmOetm1+k4KbN9sroG4Fvh9004SCFjxb4Xajr60/WRIR4gySvmkF2lPkKsE/R+ZemulXKaIMUpg9D8gWxhiLiFcT67/bWPdaAvCnAozSH6GjNs711PylYdvP91/Ca8c+RemlIQmboHSX+BXlh/7feuidqyBqJ/CfIDsiNi0HNQBFv3IveuqYUPbYsUFBG/wipkYAk2ZReHEjrshZxF+/z1i2vkBND/4iYAILewU+Wa4vWfHbl27lFoWVuk7fuPCQN+TSJJaZJjiVZPUhm7TvAMmX0cRWiTgO+hfzf3nqS4aiThOhY8fohfcPxyjD+f+HcN0jeiywcbQl9ldHnAfOQSnzom7vuRggYDtzmrata5amM3hbxSCYjb9TuA+yGZO+y4hJv3aU5zmsIbcsxBJ/7MuCU8FPl3wDlGjdD/mUsQvgoJAe9HXJTh4U+PkDSr28hdd/rqqV7i0TbkznK6IOAS0jG3Thup8fbQ7x1f2q9dsWh7Ukcb92qkHI9ApkAY6q0A7E8gMPapF5haDvREd66Zd66LyKR4L2IZQ8Phw9vl15Foe1DRy2EaPBMZLFXAeO9dX9tr1b5MWiJjghBysnAw/3lSEqUKFGiRIkSJUqUKFGiRIkSJUq0Bv8HpLBW9qBbEr8AAAAASUVORK5CYII=" alt="">
   </a>
+</div>
+
+<div id="drop-zone">
+  <span id="drop-label">⊕ Arrastra un audio aquí o haz clic para cargar</span>
+  <input type="file" id="audio-file" accept="audio/*" style="display:none">
+  <button id="clear-audio" style="display:none">✕ Quitar audio</button>
 </div>
 
 <div class="main">
@@ -143,7 +173,7 @@
     </div>
     <div class="ctrl-group">
       <span class="ctrl-label">Fc</span>
-      <input type="range" id="fc" min="20" max="20000" step="1" value="1000">
+      <input type="range" id="fc" min="1" max="20000" step="1" value="1000">
       <span class="val-display" id="fc-val">1000 Hz</span>
     </div>
   </div>
@@ -159,6 +189,7 @@
     <canvas id="magCanvas" height="180"></canvas>
     <div class="legend">
       <div class="legend-item"><div class="legend-line" style="background:var(--c-mag)"></div> Magnitud (dB)</div>
+      <div class="legend-item" id="legend-wave-filt" style="display:none"><div class="legend-line" style="background:#ff7c40"></div> Onda filtrada</div>
     </div>
     <div class="cursor-info" id="cursor-mag">— Mueve el cursor sobre el gráfico</div>
   </div>
@@ -168,6 +199,8 @@
     <canvas id="phaseCanvas" height="180"></canvas>
     <div class="legend">
       <div class="legend-item"><div class="legend-line" style="background:var(--c-phase)"></div> Fase (°)</div>
+      <div class="legend-item" id="legend-phase-orig" style="display:none"><div class="legend-line" style="background:rgba(255,255,255,0.35)"></div> Original</div>
+      <div class="legend-item" id="legend-phase-filt" style="display:none"><div class="legend-line" style="background:#ff7c40"></div> Filtrada</div>
     </div>
     <div class="cursor-info" id="cursor-phase">—</div>
   </div>
@@ -177,6 +210,8 @@
     <canvas id="gdCanvas" height="180"></canvas>
     <div class="legend">
       <div class="legend-item"><div class="legend-line" style="background:var(--c-gd)"></div> Group Delay (ms)</div>
+      <div class="legend-item" id="legend-gd-orig" style="display:none"><div class="legend-line" style="background:rgba(255,255,255,0.35)"></div> Original</div>
+      <div class="legend-item" id="legend-gd-filt" style="display:none"><div class="legend-line" style="background:#ff7c40"></div> Retardada</div>
     </div>
     <div class="cursor-info" id="cursor-gd">—</div>
   </div>
@@ -198,7 +233,7 @@
     </div>
     <div class="ctrl-group">
       <span class="ctrl-label">Fc</span>
-      <input type="range" id="fc-b" min="20" max="20000" step="1" value="1000">
+      <input type="range" id="fc-b" min="1" max="20000" step="1" value="1000">
       <span class="val-display" id="fc-val-b">1000 Hz</span>
     </div>
   </div>
@@ -222,7 +257,7 @@
 // ═══════════════════════════════════════════════
 
 const N_POINTS = 512;
-const F_MIN = 20;
+const F_MIN = 1;
 const F_MAX = 20000;
 const FS = 48000; // sample rate de referencia
 
@@ -498,6 +533,48 @@ function update() {
     const xL = [20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000];
     const yL = [0, -3, -6, -12, -24, -48, -60];
     const pad = drawGrid(magCtx, W, H, xL, yL, -60, 3);
+
+    // Capa de onda filtrada (si hay audio)
+    if (audioMono) {
+      const wc  = 2 * Math.PI * fc / audioSR;
+      const wca = 2 * audioSR * Math.tan(wc / 2);
+      const biquads = buildBiquads(order, wca);
+      const filtered = new Float32Array(audioMono.length);
+      filtered.set(audioMono);
+      for (const b of biquads) {
+        let x1=0, x2=0, y1=0, y2=0;
+        for (let i = 0; i < filtered.length; i++) {
+          const x0 = filtered[i];
+          const y0 = b.b0*x0 + b.b1*x1 + b.b2*x2 - b.a1*y1 - b.a2*y2;
+          filtered[i] = y0; x2=x1; x1=x0; y2=y1; y1=y0;
+        }
+      }
+      const peak  = Math.max(...audioMono.map(Math.abs), 1e-6);
+      const count = filtered.length;
+      const { padL, padT, padB, plotW, plotH } = pad;
+      const bSize = Math.max(1, Math.floor(count / plotW));
+      const mid   = padT + plotH / 2;
+      const scaleY = plotH / 2 - 4;
+
+      magCtx.strokeStyle = 'rgba(255,124,64,0.45)';
+      magCtx.lineWidth = 1;
+      magCtx.beginPath();
+      for (let px = 0; px < plotW; px++) {
+        const s = px * bSize;
+        const e = Math.min(s + bSize, count);
+        let mn = 0, mx = 0;
+        for (let i = s; i < e; i++) {
+          if (filtered[i] < mn) mn = filtered[i];
+          if (filtered[i] > mx) mx = filtered[i];
+        }
+        const yTop = mid - (mx / peak) * scaleY;
+        const yBot = mid - (mn / peak) * scaleY;
+        magCtx.moveTo(padL + px + 0.5, yTop);
+        magCtx.lineTo(padL + px + 0.5, yBot);
+      }
+      magCtx.stroke();
+    }
+
     drawCurve(magCtx, freqs, mag, '#1db97a', W, H, -60, 3, pad);
     drawFcLine(magCtx, '#1db97a', W, H, pad);
   }
@@ -512,6 +589,51 @@ function update() {
     const yL = [];
     for (let v = -maxPhase; v <= maxPhase; v += yStep) yL.push(v);
     const pad = drawGrid(phCtx, W, H, xL, yL, -maxPhase - 10, maxPhase + 10);
+
+    // Capas de onda (si hay audio)
+    if (audioMono) {
+      const wc  = 2 * Math.PI * fc / audioSR;
+      const wca = 2 * audioSR * Math.tan(wc / 2);
+      const biquads = buildBiquads(order, wca);
+      const filtered = new Float32Array(audioMono.length);
+      filtered.set(audioMono);
+      for (const b of biquads) {
+        let x1=0, x2=0, y1=0, y2=0;
+        for (let i = 0; i < filtered.length; i++) {
+          const x0 = filtered[i];
+          const y0 = b.b0*x0 + b.b1*x1 + b.b2*x2 - b.a1*y1 - b.a2*y2;
+          filtered[i] = y0; x2=x1; x1=x0; y2=y1; y1=y0;
+        }
+      }
+      const peak  = Math.max(...audioMono.map(Math.abs), 1e-6);
+      const count = audioMono.length;
+      const { padL, padT, plotW, plotH } = pad;
+      const bSize = Math.max(1, Math.floor(count / plotW));
+      const mid   = padT + plotH / 2;
+      const scaleY = plotH / 2 - 4;
+
+      const drawWaveLayer = (signal, color) => {
+        phCtx.strokeStyle = color;
+        phCtx.lineWidth = 1;
+        phCtx.beginPath();
+        for (let px = 0; px < plotW; px++) {
+          const s = px * bSize;
+          const e = Math.min(s + bSize, count);
+          let mn = 0, mx = 0;
+          for (let i = s; i < e; i++) {
+            if (signal[i] < mn) mn = signal[i];
+            if (signal[i] > mx) mx = signal[i];
+          }
+          phCtx.moveTo(padL + px + 0.5, mid - (mx / peak) * scaleY);
+          phCtx.lineTo(padL + px + 0.5, mid - (mn / peak) * scaleY);
+        }
+        phCtx.stroke();
+      };
+
+      drawWaveLayer(audioMono, 'rgba(255,255,255,0.20)');
+      drawWaveLayer(filtered,  'rgba(255,124,64,0.45)');
+    }
+
     drawCurve(phCtx, freqs, phase, '#e0a800', W, H, -maxPhase - 10, maxPhase + 10, pad);
     drawFcLine(phCtx, '#e0a800', W, H, pad);
   }
@@ -526,6 +648,73 @@ function update() {
     const yL = [];
     for (let v = 0; v <= maxGd; v += yStep) yL.push(v);
     const pad = drawGrid(gdCtx, W, H, xL, yL, 0, maxGd);
+
+    // Capas de onda con desplazamiento temporal
+    if (audioMono) {
+      const wc  = 2 * Math.PI * fc / audioSR;
+      const wca = 2 * audioSR * Math.tan(wc / 2);
+      const biquads = buildBiquads(order, wca);
+      const filtered = new Float32Array(audioMono.length);
+      filtered.set(audioMono);
+      for (const b of biquads) {
+        let x1=0, x2=0, y1=0, y2=0;
+        for (let i = 0; i < filtered.length; i++) {
+          const x0 = filtered[i];
+          const y0 = b.b0*x0 + b.b1*x1 + b.b2*x2 - b.a1*y1 - b.a2*y2;
+          filtered[i] = y0; x2=x1; x1=x0; y2=y1; y1=y0;
+        }
+      }
+
+      const peak   = Math.max(...audioMono.map(Math.abs), 1e-6);
+      const count  = audioMono.length;
+      const { padL, padT, plotW, plotH } = pad;
+      const bSize  = Math.max(1, Math.floor(count / plotW));
+      const mid    = padT + plotH / 2;
+      const scaleY = plotH / 2 - 4;
+
+      // Retardo en muestras a partir del GD en Fc
+      const fcIdx     = Math.round(((Math.log10(Math.max(fc, 20)) - Math.log10(F_MIN)) / (Math.log10(F_MAX) - Math.log10(F_MIN))) * (N_POINTS - 1));
+      const gdAtFcMs  = fc < 20 ? 0 : gd[Math.max(0, Math.min(N_POINTS-1, fcIdx))];
+      const shiftSamp = Math.round(gdAtFcMs * audioSR / 1000);
+      const shiftPx   = Math.min(Math.round(shiftSamp / bSize), plotW);
+
+      // Original (blanco)
+      gdCtx.strokeStyle = 'rgba(255,255,255,0.20)';
+      gdCtx.lineWidth = 1;
+      gdCtx.beginPath();
+      for (let px = 0; px < plotW; px++) {
+        const s = px * bSize;
+        const e = Math.min(s + bSize, count);
+        let mn = 0, mx = 0;
+        for (let i = s; i < e; i++) {
+          if (audioMono[i] < mn) mn = audioMono[i];
+          if (audioMono[i] > mx) mx = audioMono[i];
+        }
+        gdCtx.moveTo(padL + px + 0.5, mid - (mx / peak) * scaleY);
+        gdCtx.lineTo(padL + px + 0.5, mid - (mn / peak) * scaleY);
+      }
+      gdCtx.stroke();
+
+      // Filtrada desplazada a la derecha (naranja)
+      gdCtx.strokeStyle = 'rgba(255,124,64,0.50)';
+      gdCtx.lineWidth = 1;
+      gdCtx.beginPath();
+      for (let px = 0; px < plotW; px++) {
+        const srcPx = px + shiftPx;
+        if (srcPx < 0 || srcPx * bSize >= count) continue;
+        const s = srcPx * bSize;
+        const e = Math.min(s + bSize, count);
+        let mn = 0, mx = 0;
+        for (let i = s; i < e; i++) {
+          if (filtered[i] < mn) mn = filtered[i];
+          if (filtered[i] > mx) mx = filtered[i];
+        }
+        gdCtx.moveTo(padL + px + 0.5, mid - (mx / peak) * scaleY);
+        gdCtx.lineTo(padL + px + 0.5, mid - (mn / peak) * scaleY);
+      }
+      gdCtx.stroke();
+    }
+
     drawCurve(gdCtx, freqs, gd, '#4a90d9', W, H, 0, maxGd, pad);
     drawFcLine(gdCtx, '#4a90d9', W, H, pad);
   }
@@ -559,6 +748,69 @@ setupHover(magCv,   cursorMag,   '#1db97a', 'mag',   'dB');
 setupHover(phaseCv, cursorPhase, '#e0a800', 'phase', '°');
 setupHover(gdCv,    cursorGd,    '#4a90d9', 'gd',    'ms');
 
+// ─── Sistema de forma de onda ───────────────────
+let audioMono  = null;  // Float32Array mono completo
+let audioSR    = FS;    // sample rate del archivo
+
+const dropZone   = document.getElementById('drop-zone');
+const audioFileEl= document.getElementById('audio-file');
+const dropLabel  = document.getElementById('drop-label');
+const clearBtn   = document.getElementById('clear-audio');
+
+dropZone.addEventListener('click', () => audioFileEl.click());
+audioFileEl.addEventListener('change', e => { if (e.target.files[0]) processAudio(e.target.files[0]); });
+dropZone.addEventListener('dragover',  e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  if (e.dataTransfer.files[0]) processAudio(e.dataTransfer.files[0]);
+});
+clearBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  audioMono = null;
+  dropLabel.textContent = '⊕ Arrastra un audio aquí o haz clic para cargar';
+  clearBtn.style.display = 'none';
+  document.getElementById('legend-wave-filt').style.display = 'none';
+  document.getElementById('legend-phase-orig').style.display = 'none';
+  document.getElementById('legend-phase-filt').style.display = 'none';
+  document.getElementById('legend-gd-orig').style.display = 'none';
+  document.getElementById('legend-gd-filt').style.display = 'none';
+  audioFileEl.value = '';
+  update();
+});
+
+async function processAudio(file) {
+  dropLabel.textContent = '⏳ Cargando…';
+  try {
+    const arrayBuf = await file.arrayBuffer();
+    const tmpCtx   = new (window.AudioContext || window.webkitAudioContext)();
+    const decoded  = await tmpCtx.decodeAudioData(arrayBuf);
+    tmpCtx.close();
+    audioSR = decoded.sampleRate;
+
+    // Mezclar a mono
+    const numCh = decoded.numberOfChannels;
+    const len   = decoded.length;
+    const mono  = new Float32Array(len);
+    for (let ch = 0; ch < numCh; ch++) {
+      const d = decoded.getChannelData(ch);
+      for (let i = 0; i < len; i++) mono[i] += d[i] / numCh;
+    }
+    audioMono = mono;
+
+    dropLabel.textContent = '✓ ' + file.name;
+    clearBtn.style.display = '';
+    document.getElementById('legend-wave-filt').style.display = '';
+    document.getElementById('legend-phase-orig').style.display = '';
+    document.getElementById('legend-phase-filt').style.display = '';
+    document.getElementById('legend-gd-orig').style.display = '';
+    document.getElementById('legend-gd-filt').style.display = '';
+  } catch(err) {
+    dropLabel.textContent = '✕ Error — intenta con otro archivo';
+    console.error(err);
+  }
+}
+
 // ── Controles inferiores (clon sincronizado) ──
 const orderSelB = document.getElementById('order-b');
 const fcSliderB = document.getElementById('fc-b');
@@ -575,7 +827,9 @@ orderSelB.addEventListener('change', () => {
 });
 
 fcSliderB.addEventListener('input', () => {
-  fc = parseInt(fcSliderB.value);
+  const logMin = Math.log10(F_MIN), logMax = Math.log10(F_MAX);
+  const ratio = (fcSliderB.value - parseInt(fcSliderB.min)) / (parseInt(fcSliderB.max) - parseInt(fcSliderB.min));
+  fc = Math.round(Math.pow(10, logMin + ratio * (logMax - logMin)));
   fcSlider.value = fcSliderB.value;
   setFcDisplay(fc, fcVal);
   setFcDisplay(fc, fcValB);
