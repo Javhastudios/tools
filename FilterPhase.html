@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Filter Phase — Javhastudios Tools</title>
+<link rel="icon" type="image/png" href="data:image/png;base64,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">
+<link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #e8e8ec; --panel: #f2f2f6; --border: #d0d0dc;
+    --green: #0f6151; --green-dim: #0a4039; --muted: #333333;
+    --dark: #1e1e22;
+    --c-mag: #1db97a;
+    --c-phase: #e0a800;
+    --c-gd: #4a90d9;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg); font-family: 'Raleway', sans-serif;
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; padding: 32px 16px 48px;
+  }
+  body::before {
+    content: ''; position: fixed; inset: 0;
+    background: repeating-linear-gradient(to bottom, transparent 0px, transparent 3px, rgba(0,0,0,0.012) 3px, rgba(0,0,0,0.012) 4px);
+    pointer-events: none; z-index: 999;
+  }
+  .header { text-align: center; margin-bottom: 28px; }
+  .logo-wordmark { height: 48px; width: auto; display: block; margin: 0 auto 10px; opacity: 0.85; }
+  .logo-wordmark:hover { opacity: 1; }
+  .logo-tagline { font-size: 12px; font-weight: 700; letter-spacing: 5px; color: var(--muted); text-transform: uppercase; margin-bottom: 10px; }
+  .logo-tagline span { color: var(--green); }
+  .logo-img { display: block; margin: 4px auto 0; width: 80px; opacity: 0.12; }
+
+  .main { width: 100%; max-width: 900px; display: flex; flex-direction: column; gap: 16px; }
+
+  .controls {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 4px; padding: 18px 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8);
+    display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
+  }
+  .ctrl-group { display: flex; align-items: center; gap: 10px; }
+  .ctrl-label {
+    font-size: 10px; font-weight: 700; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--muted); white-space: nowrap;
+  }
+  input[type=range] { width: 120px; accent-color: var(--green); cursor: pointer; }
+  .val-display {
+    font-size: 11px; font-weight: 700; color: var(--green);
+    min-width: 52px; font-variant-numeric: tabular-nums;
+  }
+  select {
+    font-family: 'Raleway', sans-serif; font-size: 11px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+    background: var(--dark); color: #fff; border: 1.5px solid var(--border);
+    border-radius: 3px; padding: 6px 10px; cursor: pointer;
+  }
+
+  .status-bar {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;
+  }
+  .status-pill {
+    font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; padding: 7px 8px; border-radius: 4px;
+    background: var(--panel); border: 1.5px solid var(--border); color: var(--muted);
+    text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .pill-mag   { background: var(--c-mag);   color: #fff; border-color: var(--c-mag); }
+  .pill-phase { background: var(--c-phase); color: #fff; border-color: var(--c-phase); }
+  .pill-gd    { background: var(--c-gd);    color: #fff; border-color: var(--c-gd); }
+
+  .panel {
+    background: var(--panel); border: 1px solid var(--border);
+    border-radius: 4px; padding: 20px; position: relative;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.8);
+  }
+  .panel::before {
+    content: ''; position: absolute; top: -1px; left: 20px; right: 20px; height: 1px;
+    background: linear-gradient(to right, transparent, var(--green), transparent); opacity: 0.4;
+  }
+  .panel-title {
+    font-size: 10px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--green); margin-bottom: 14px;
+  }
+  canvas { display: block; width: 100%; border-radius: 3px; }
+
+  .legend {
+    display: flex; gap: 20px; margin-top: 10px; flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 10px; font-weight: 700; letter-spacing: 1px;
+    color: var(--muted); text-transform: uppercase;
+  }
+  .legend-line {
+    width: 20px; height: 3px; border-radius: 2px; flex-shrink: 0;
+  }
+
+  .cursor-info {
+    font-size: 11px; font-weight: 600; color: var(--muted);
+    margin-top: 8px; min-height: 18px; letter-spacing: 1px;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .footer {
+    font-size: 10px; font-weight: 600; letter-spacing: 2px;
+    color: var(--muted); text-transform: uppercase; margin-top: 32px;
+  }
+  .footer-link { color: inherit; text-decoration: none; }
+  .footer-link:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <a href="https://www.javhastudios.com" target="_blank">
+    <img class="logo-wordmark" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAATQAAAB1CAYAAADA8h3iAAAh8ElEQVR4nO2dedgcRZnAfySQADkqASUcKpfLIQJRJCCKIIIudwqRSyIUwhIMrLgeu0QWEPFYXRUXUDnrAwSRwwJEuRQREESuBARRbhDCJaSIARJIsn9UDdPT09Pd09fMfF//nifPN9NdU/VmpvvtqrfeYzkiEEpuBNwOTAwcfg1Y7F+/6l8v9q8XAm8AywPjgZWAscDKwBhgtD/e4FarzYeixq6pqanJynKdTgglPwsI4G3AusBW/m8WFuMU5FzgSeA+q801GfuqqampiaSjQotCKLkVcAqwZRcfuxKYabWZ181YNTU1Nd3SlUJrIJS8F9g0RdMHrTYbZxmjpqampltGZfzciSnb/Shj/zU1NTVdk1WhXZuy3c0Z+6+pqanpmkwKzWqzAEhjE3skS/81NTU1Wcg6QwN4IeH8Eq/4ampqaiohj0J7I+H8P3P0XVNTU9M1eRRaksJalqPvShFKvl0o+bley1FTM2gIJXcWSn6413I0yKPQkhSWzdF31ZwBnCaU/HavBampGRSEkpsCVwHXCCXX6LU84EKVsjJICqsjQsnNgOn+7ZFCyf+x2rxcQL/HAvsD40KnFgBL/Os3cGFjjeMrAiv4z6zQ6IpWf8HncY7Kd+eVMS1CyVOBXWh9AL4CLPWv5weOjceFuzVC3SYGPvcXq83OMePMBv4tdLgRZgfue2vYZRf4ccb69xNwIXbL4b6zBldbbY7o/L/Lh7+RrwmNGZQT3GrmTWCR/9cIKRyDCw+E1t/8VWBfq819JYldFF/F/bbjgC8AX+mtOPkUWhKvlNh3kcwKvB7n359UQL+348LGVgbWAzYC1srY19+BP+E2Yl4GnipAvm74DU75jgE2BLYG1k752b8Cd+MUcZISvgVYE5gETAbWB7I4Zj/qx3oa+H2Gz6fGajNPKHklsAZO7tWAqbjfvBteBW4FHgZewv3mfYtQcnVgr8ChmULJk6w2Pb3vM0UKAAglzwNmxDSZa7WZmrX/KhBKTgCeoTVw/mmrzTtKGm9z4Cjgs1187CyrzWFlyJMVoeR6uLjc8THNbgKOstrcm3OsjYAhXCxxEhbY32pzdZ4xi0Ao+XngB6S7xy4AZlltBmbV42fT3wgd/rzV5v96IU+DPDa0pclN+p59aL8p1xJK7hXVOC9Wm7lWm0OBT5H++/ttGbLkwWrzKHBHTJPzrTbb5VVmfqwHgd1xM5gkju0HZQZgtfkhcFaKps9YbQ4cJGXmiXool7a0T0sehTYcCNtrGhxZ5qBWm0uB41I2n1qiKHl4V4fjd1htPlPkQFabF4AbUjS9vMhxC+CyFG36QgF3g1DyY0QvqTcSSu5QtTxBRqxC8zs00zqc/qhQstSgeqvNN4C/pWg6vUw5suCXnOtHnFoCHFrSsA8lnF9ktek3u1OaSJlHS5eieOJMJkdVJkUEI1ahkXzjVTF9Pj5Fmw2Fkh8oXZLu2KPD8aEilpkdSFJWz5U0bmasNg+naDZQabWEkqsCn4xpsrtQ8p1VyRNmJCu0uA0NgIOFknFG79xYbS4CnkjRtKxZT1b2izi2BPhmiWMuTDifFLnSrwya7WwGbre7E6OBwyuSpY0RqdCEkgfg3ALimECy0iuC01K02b90KVIilGxkLw5zqd8sKItFCecHNdRu0DbX0jxce7YrPyIVGum/8CrCoc4GXk9oM1EoWYVyTcO+HY6fWvK4g6qwkmZg86sQogiEkh8ENknRdDWhZE8ewiNOoQkl3w1sn7L5e8uOU7PavARclKJpN75rZRK1gznHanNLyeO+WXL/vWKQZmjdmD5mliZFDCNOodG9YqhicyDNsnM7r4x7hlByGtGe+2XPziA58iRpSdorkvznBiKixjuhR9lOO/ERoWSa2VyhjESFpkLvLybeF2hvoeTbS5QHq82duFCpJHq9OXBwxLGXrDZnVzB20kzmtQpkyMLi5CYDwf40407BzZgPpxmXHEXls7QRpdCEktOBKaHDs4FjYz42BjikLJkCpKm/cHDZQiQQZRc5s3IpanpB2O58qdXmDOKdmQ8SSoaTM5TKiFJotP8of7TaPOIzV8RlNih9G9pqcx7wYkKzKV4pV45Qch9c8HWQpcBPqpempkp8DHLYF/IC/3co5qMTgAPKkKkTI0aheWe/fw0d/mng9VDMx9cVSnZMe1MgaZZuvVp2Ro17pdXm8aoFqamc8G//D6vNVQD+b5xTc6WJU0eMQsMt14L/3zeBSwLvLyB+J60Ke8CPSbYV7SyULCUbSCeEkusAO0ac6mlmhZrKCLsMXRJ6/1M6M9UXKK+EkaTQwk+Z6602zzfeWG2eA34V8/ndhJKdArILwWrzBC4DaByjaN/YKJvP0p4G5wGrze8qlqOmYrz/owgdDiuwcxK6qSwLx4hQaELJj9OeHeKCiKZDMd2MohoP6DSbA1VsUgSJUqCnVCxDTW8ITwSesNr8IXjAavMA8emk9hNKrlK4ZBGMCIVGe5qghcAV4UZWm8uJN8yXrtCsNteSnFliHaHkTmXLAiCU3J32TLvzgfOrGL+mdwglNwA+Ejp8YYfmQzFdjaWiHfphr9CEkqvRnh3iSqtNp1CaqJlbgylCyU8VI1ksaWZpVcXLRTkin2m1SQoWrxl8ojaCOt0fPyPe564Sn7Rhr9BwBs0VQsfijJg6ob8qdm2GSPYw31Mo+bYyhfAFQHYLHV5KOoVbM/gcFHo/12pzf1RDX1iobdUT4F+EklEbS4UyEhRaeLn5otXm150aW23mAvfE9Le9z3NfGlab+XSe2jcYQ3RcZZEoXDqYIFfUrhrDH6HkJ3EFX4IkXZM93xwY1gpNKLktsEHo8MUpPjqUcL6K6XOa+MiyfdKilps/LHnM4cagBtWHr61lJCg0q801uKJDndhTKLlmXsHiGNYKjWg7U5yNrMGFxCcMPDiTNF3gZ4p/SGi2sVBymzLG75A3/l6rTall4YYhA5f2yLsnfSJ0+KaUKc7jNotG07mORyEMW4UmlJwE7B06/JjV5takz1ptXiTeH0wIJatI55MmC0dZs7SofuvZ2cjgENr9DtNMBCB5dVPqZlaZhYZ7zQHASqFjP+vi80OAjDn/OdKFKmXGavMzoeTJtNsyguwrlDy6yAKvfrMhXMrvRatNko2kl0wRSm5BfPaHqlkeKDVTS0mE/RwXA5em+aDV5kGh5O10rqO6plByL6vNL/II2InhrNCingRxu5stWG2uFEo+R3t2jgbvF0puZbVJk/YnD6cD/x1zfmVcnqozChzzQNrzxhfZfxlsBNzZayEGHaHkLkC4yMmv/S5mWs4hvjD0LKAUhTYsl5z+ST01dHiO1eYvXXaVpACrCOk4g+RZR9HLzvCmx5vUrhojhShTStLuZpifE59Wfgeh5IZd9pmKYanQyL4ZEGYo4XzpIR3eEHtlQrMthZKbFTGeUHJ7IHyxXWa1ebqI/mv6F6HkFNqd0F+x2oSD0WPxVeBNQrNSJgPDbsnpE8qFczAtozv7GQBWmz8LJe8CtujQZCzOV+t73fbdJacQb88Dp8SLKPIa5Tg8CJsBL+Fmkf1mQ/sCrZle+5mDaNcJWZeGQ8RXKzsIODpj3x0ZdgoN2AeXWC7IjTlmGEN0VmjgnjSlKjSrze+Ekn8hOp9/g0+TU6EJJVenvVL7HVab2/L0WxH3WW3ibI09QSi5G7B5r+VISTehTrFYba4TSj5Nexxwg0lCyUOK3mgajkvOqB+lWxtAkAuIj1Fb32fzKJskG9ZkoeSnc45xCO1hYnXOsxGANzX8S+jwPKvNb3J0O5RwvvAwwmGl0ISS7wHCjqaLaU9Il5oUMWpQTXzneSQ7aebdHAinGp9ntUm9M1wz0ERtBqQprxjHuQnnt/CVxApjWCk0om/oX3kjZR6GEs7v7lN8l4b3Mzsvodn2WUvd+aVROGdcvbM5AvBO6FFZZPKsbLDaPERytEuhk4HhptCigrVzzzB8MPuzMU1GUXJIhyeNgskawRB21Xgd5wNXM/yZgdvgCvJXX14xL0MJ5/ct0lNg2GwKCCX3BVaNOLW+UPLgAoZ4Blg95vxhxDvA5sZqc79Q8vfAdjHNFHBMN/0KJdcGdgkdvtBq80KXItYMJlErm/kF3TdR92SQFXGx0d8vYKzho9DoHCP2nYrGnyKU3MdqkyabRx5OJV6hTRFKTvfZd9Pyb7TH7p3cpVw1A4i3YUX5MG5FvLd/kRxBQQptWCw5hZLrATv0Wg4q2Byw2lxKfIoW6H7ZGW5/g9Umrk5pzfChV2URg7y7qJTyw0KhEZ0doBds53dayyYprnIXoWQn/58WfAHhcLzqyVmEqhksvBN6nPNrlcwqopPhsuSMqoJ0OsVX9R6PC0OaHNNmJvDvBY8b5gzgWDr/fqNw38nXU/QVDkF52Grzyxyy1bQSdvLuJ/bDXdNBFuCcq18qeKwZwH/EnN9NKPlOq81TeQYpU6FVkqnTVyVaI2Ls432tzaLHOwf4YkyTg4WSx5RZRMRqM08oeRmwb0wzRYJCE0puDGwfOlw70hZLOIV5PxHphG61uaHogYSSj+Me9p3CwEbj7ODH5RmnzCVnVZk6ozYDri1DmXmSZn0TcGFIZZPkwrFuiqIU4VCpV0guEtOvTOy1AIOEUHJTYOuIU0m+jpnwdTKSHHVzJ38caBuaz08edjeAZA/lzFhtHgauT2hWxebATUCS4b7jBSKUFLT77Z0VU96v3xnoa7kHRG0cPZQmo3MOkh7Cq+ctEznoF0FUVaL53aY7ycCPE85vLpT8YMkyQPIFMj2m1N0hwLjA+6XU1dB7Qa9mljMijpUyO2tgtbkLuCuhWa7JwKArtDLizxKx2hiSXSeqSP54Pm6Z2IkxuOyzURwZen95n5enC3uyDxcqvweFkgcAYe/8ZZSs0DxJk4Ht83gKDKxC81WJ1o04VdpyM8SZCef3KbsQsN94GEpo1mb49Rsp4YpOJxcjVWmE60PUZCdqInCj1ebJsge22pwNJMVWZy4TmUeh9VoZRtmHHrLa/LGi8c8iPpngWKLdSYom6Ym3ScTyN7wZcLfV5uYCZarpU3zygign9KomAmnGOsj7yHVNHqXUs10lP/OJyuA6VJUMPjV2XKk7qKAgsdXmQSApZ9VbszTvqhH2yj65YLFq+peoh+xC4LIKZUhKejCR9qzTqej1LCsrM2ivSrSM+CKnZZDGdWLnCuRIqt+5r1Cy4eAZnp3Ns9pU/b3V9A4VceyyKne3rTYPAEkFqzNtDgyqQotabt6Q18u4W6w21wGPJDQrfXPAB6LH/d/H4Qq6TKLdVSNNMeNBoB9C36JI2syobKUjlJxOdMaYKpebDZL8OacKJaP85GLJo9B6susklNyG6Nz6VezQRJE0fd7Vp+cpm6QL5DCcMThomxiknGeTEs6LKoTIQNJmRpXhh1GbAU+VERmQhNXmIiApPVXXs7Q8Ci3ph1qQo+84osI1qrYBBNHE1xwYRQW2NNwmRZwcW9KeJ+08q82L5YlUKIMadxyu0RCmkhmaUPIdRDuh92oiAO6ajWMfoWRXlefLXHIWXk5MKDmR6PjFS8uMnYzDK4QkR94jhJLhIOCi5Xg+hRzhZHsnlyNNKSR9f/06Q0sqYVfVSkcRfb/3UqGdibN9d2IsXSZ6KNNtI65yclYOJPoC6bVRO2m5J6gmRXc39rCrM1SS7yVJWStWrESK4qlKEUetbG632vytovHbsNo8BlyT0OyIblw4ynTbKEOhRa2p51ltflvCWKmx2twC/Dmh2ZcrmKXdBsxJ2byqTL5FEc6oEqbvFFrKwjlJKaqLkGNP2gvgQIbi2yWQ5Ee5Kl0UJC5TocWF5HSNUHJXYJOIU0kaviqSfpjVic8HVRRp4jHvtNrcWLYgBZNoS/F2on4iTaRI6QoN+M8Ox5P8KEvH595LilD4SlpbWh6FljTbyFs6Lkyn3F6/K3icrPyU5JRJ/yWUDBdzLRRfifrlhGaDNjsDSLNTnDSLq5o1C2qTGe8HGZUo4e9WmySXo6pICiOcSEp7bx6FlmTTmJ+j7xaEkkcC7+twek5R4+TB181MmsKvRDVG2KGYc49UkI2kDNIELG9UuhTdkaZGamkPOG/i6JSwc25Z42bgLJITwh6QJrVQHoWWZLMoxB3AO9f9b0yTuHqZVZOmbubWQsmyq5GfRufdo4GbnQkl30er/1wnti1bli6Jq87VYH2h5GoljX8OnZVq39w3VptngctTND1XKBlbiSqTQkvpKJo7cl8ouRdwLfFb26VWLO8Gq80cktMKAXxaKPnLsi5kv5T4VcSpeVabpAIr/UinFEhhPu1jVXuOUHIN4BMpmi4HnFDw2JOFkr8guhp6g36zN6apY7EScINQsmNG6EzhIkLJDwB3JDTbwJeC76bfycBaOCfQz9Ce7z6KucDhVpvbuxmrDPz3chvpnUAX4sJOrsMZ6p8uUJaP0R60/gWrzclFjVEmPvZ0M2Av3C5X2ofvK7glzM3A48CTVpuiC350xNtIPwTMprvl5I3AxcADwGPdpvLx2ZvfA+yIc9FIs9lwHHBald9PJ4SSF9JdBao7cXbr26w2f2oczKrQdsdVP+rEm1abJA/pYH934y7ePAUlluCM8mdbbeKKmJSCN75eQbJneBzLcEv1z/n6m3ll+iPNYrHPWm36zWjehq+D8AuKrZa0FPib1aa02ZtQ8lqcMinSWX0BcKTVJtLu6m1KZ5P/u1rox9quF35pQskbSbc8j+M14P6s4SRJy7xuHTZPolm9eQFOOb0GLML5s72O22R4Ezf7mYCz4Y3DTUPH4nZdlweu7nLsQrDaXC2UfC/OvWAVnHIeR1PBrUjT7jiGzh7kL5CciSAts4GGj96JBfVZNnOBb+B+11dx4VyLcNfDYn/sFX9sBZrfq8A9oJenuQMffH1/yXL/CDc7X0rTZcniHlIWdw2/hruGV/DyjqUZQjiB5gN9Ik4xLqT5+0VxC273fxzwhm8PzQ0568d8DXdPreTbTsB9N4Lmd2R76GS7B242O9nLMppWJT0p8Lrx3YR5E7gj6wztf4CvxDQ532oTzupQ0wOEkvsC77LafLfXstTUlE3WGVqSbeCWjP3WFIzV5ue9lqGmpiqyrvc3SDh/bcZ+a2pqajJThkL7i9XmiYz91tTU1GSma4UmlNyS+J28C7OLU1NTU5OdLDO0D8Scq6q2X01NTU0bWRTaR2POXV1Fbb+ampqaKIpWaJ0yYtTU1NSUTlcKTSj5ETrneLq8wiK/NTU1NW10O0PrFBT6KvD5nLLU1NTU5CK1QvPBwp2CR4+qbWc1NTW9ppsZ2qFEB8Ge67Ok1tTU1PSUVLGcvurKw7RXXb7JapM3Sr6mpqamENLGch5HuzL7My5KvjR81ZxNcVH4o3HZA+YBD/qU10WMsT0uF1lSPYBu+x3Xq1qhNYOFv85XxmUQWWC1+UePRUIouRawOe7eWx6XweNZXCRQoQWQiiRxhtYhaeEc4ONWm6RS7pkQSh6DW+KuF9PsCdxy9/gc40wF7sGlVnkW+AdOaS7N2OUKuGX56sAYq82kjHJ9AjgMV3psDC7P25s0UyW9DPzeanNCyv4OA3ajmfbpFZopWv4BGKvNqRllPRLYycu6HM2UOXEpkqCZBuhx4BFcjcibssjQhawfwxXcbeSvt7jvIZhu6GvdJibtUoaJwCeBnYFpNL+3IAtxE4ZbgF9abYpKJ5VGvi/hasjGJaB4Evi51SYu405PiFVo/su/i9a85LcCu1htiq7q1MgdfxmwLk6JnonLTLkAd9FtjJsV7oe7+H5itTkix3hH0VpEopEkskHj5pxEsyDsMprpxSf5v8vTnvN+vtVmclbZvHyTcFWtpgYOG6vNXhn7Ww/3fTbk+pHVZlYeGQN9rwvcTWvuqrtwD7/Gdzoep5DXxN0w4bx6i3GJQ4esNlEpxIuQc1VcNuTvh07tV2ZmEqHk24BjcQ+qlYFHcUkc7salbX8V97usj6uN8AmaqecfBb5rtUkqaJ1Hvk1wiTU3wP1upwN/wt0DK+Puvd1wng4r0KcpwpIU2lXAroFDl1ht9ilDED/tvhvn53aS1ea/Y9q+H5f47lyrzdE5xrwAeC+ubuGtnabSQskTgMZM0HaaeQkl18E9df8LWMVqs05W2QJ9HgN8M3BohtUmc5EVoeTlwJ7+7ba+SHIhhPp+1WoTW9hEKDkF+DhOwewYOj0XmGW1+UNR8oXGfpmm8r3XarN5GeP4sT4F/ASX+PN24KtJxbF9OvqjgS/TTAL5Z+AzVpt7CpZvddyDZwrw/biMz17x/R642GoTVfi7p3Tc5RRKnkOrMjupLGXm+TZOmd0Tp8wArDZ34zKELsg55sbAdKvNNUXYBaw2j1ttLsYtwd7I258nvKxPqrmZxPzA60LthqG+E///VpvnrDbnW212At5Pax69zYGbhJJfLVbEtwgWs8n7nXZEKHkirlbAKrjl7NZJygzAavOyN6dMxdUZAPfwvU0ouV/BYn4dp8weSEpfb7W5H/gBbjbdd0QqNKHkD3C2BnAX6R5JSiYPfhe1sYxKm0L7Glxq4Tx8x2rzWM4+2vBG3aKWTOF6hXk3GoLl7ebn7CtM5oeC1eYeq822QFCBjQJOEkqWkW23qAdOR4SSJwGN++aLaW2eQXxa7G1wqxdwy9ALhJKfLERIR2Oicl3K9teS/zoshTaFJpT8Pm6qC66y0wd8ufYy2Yhmvv0laT5gtbnZavPN5JaxfVyU5/MJfR9dVFcF9VNWf0Gybqa8hf9NZ4T6+pJQ8vC8fYfIO7uPxac+byjny6w2YZtdary9eneatW5HAecLJXMXVvZ9TPRv0957d1ptypo556JFoQklLwK+gLuYvmW1mVZRufhJgddbVzDeINGpYPCwxdsIjw4d/oHf1CiKVDdvFrxNqmHAX4S7p3JhtXmG1vDClXDl+vISLHc38PfeKHCuGULJ+4B9cdvoO1htZlcoR7DK+k5CyX6rgF1TMVabU2g1P6xE6+ZIkRT90PgazYf0JVabp4ro1GpzIW6zpMGHhJL/mrPbYAX1D3mXoYFllFDyizgXiU1whvZNq/R7AbDazAWeCxz6hd9NqRnZ/AetM6m9fUHdoilsGe5nZypwqGizximh97l2Gv0KLBiH/TPvnzmQjMLVbrwT2NpqM6toj/ku+F7g9duAPwglS41EqOlvrDYPAlcFDo0G9u6ROGk5mGaK+mVA0c7Chlb74scL6PM7gdeTcbvLnyqg38oZZbVZ1WrzwWA59V7g60YG86kJ4Aqh5Gk9EqmmPwjXqIhLMNoPBB/Cj1ttCt18sNq8hItuaTDW5ynM0+dpwI2BQxOAi4WSZ3oPhIGhyLL1RbAnLgwmyOeEkvcLJbfohUA1PSfss/XenkiRnmDNjWc6tsrHnND7DQvocx+c426QQ4E5QskPFtB/JfSVQrPaPI8L+5gTOvUe4I9Cyf+sXKianuJ9+oKKYbVeyZKEUHJDWiuileUi83jo/dvzdujjsnfAhTsFeTdws1DyuLxjVEFfKTQAq808nFK7JHRqeeDbQkkzaNPgmtwEFVpUTr5+IZyefnRJ44QV5ZhCOtXmBavNVsD5oVOjga8JJX/l47v7lr5TaABWm3/6MKt/pz3EYjpwg1BStH2wZrgS9Erv29Q1tDsWl3Xzh730C/Xa90HnM4HXQ6d2Aa7v53uvLxVaA++LtA0QDk+aBlxQvUTDjkW9FiAlkwKv/94rIVIQzmP2jpLGCSvKwm11VpvTcfdZOJXSNFxWjr6krxUagNXmLmALIBx+tatQspDUNyOMSYHXeWNhqyK4lHugY6se4+Mug7G37yxpNhNOS3VfCWNgtbkPd+9dFjq1g1Cy73KhwQAoNHgr88AetOewypzcsUt6+T2FlxMrRbZKTyNR5xKrzfycfVXFGoHXN/ZKiJTMCb3fpoQxgiFg1mpzbwljuM61WWC12Rs4MXTqmLLGzMNAKLQGPrXJ6YFDbxdK7lTB0L00hD4ber9Wzv7W9n/7een2Fj5FeuM6XQpcUVDXKyY3ycSvQ+/LcA7fMvDalNB/Gz6VUTAZ6iSh5J6d2veKgVJoAFabmbTGfpaWmK9PeIzWWMN3d2qYkvX931KWKSWwe+D1FVabpwvqtyyFFt4h3F8oOT6yZQZ8rv+g39mZRfWdhNXm80Dw+9+sqrHTMnAKzRMMhxnWLhw+FO3+wKFpWfsSSq5Bc/lWav7+Apnh/y7DJSIsg8KUm9XmYVpnkQI4qqj+gQMDr2+w2txaYN9pCP7f+s6Foy8UmlDyjC4/8kTg9XMdW5XD2OQmhRNMFrmtUDKrI+X0wOu+3alqIJQ8lqbT6I+KTj0doOjZ2mxa3Y1mCyXfVVDfR/u/i2lNJ5QJoWS3xXGCmUPC5pCe0xcKDeg2Fm1K4PXcjq2KY8UOr6vidJpZJ5Yn+4Xc+NxVJeW5mxR4nWvm7OMTG9le51ptjszTXwRB+Qq9D6w2DwAnBA6Np91RvGt88tVGOckvWW3CoUpZ6LaubvBhWsW91xX9otBWF0rumtzsLXb2f++32txWhkAhWm5OX42pMnya8OCT9MtCya266UMoeTzO9rIIV3ijDILKfnlf6KNrvLH51zgP+EdorW1RFBM7vC4Eq823aPWVnCaUvD5rlItQ8jM0E0X+n/fRLILJXWbWaPwWj1ltflOQDIXRLwptZVxG0sSllK/AtDZux6tI20Qck0LvK7cd+JTejWwkY4Dr0mZZ8LUWT/Bvj/BpecognKtsy8hWHRBKruGL81yOe4jcAny4wI2AIMEQqsKM9kGsNgfSqtR2xBU5mdpNP0LJ2YD2b7/ujfNFMR74rlAy0QlYKPllmhsSfekDmlhouAqEko1dvKeA2VFl2vwXfjwuA8BS4FCrjQ63K0m+x4B1Aod2t9pc1aF5mXIInJPjx/yhJcBpuNJjT0S03wM3G/swrsLToSXXnnyR1pTOzwHHAVd3ytoqlJyAMznsg8uYPBYXq3hinjz8CXJOodX+s8hqU5opwRdj/jbNmf4SnKI7LS5tly+E8lXgfTg3m8OtNmG3kLyyNWrezsPde0MRbdbE2QVn4TZnZlltflykHEXRLwrtViCYouQ1XM6n53E2o7VxaWOWw4ViHGpLrrLt5doF5zYwM3TqSeAMXAHYP1VUdyEo10zchR58qj7l5fknzs6yIe5CXYLLmjrbavMkJeBvvN1wyQ078TLuplmIK6o7BjejC1YOvwc4F1dvdX5Jsm6GixH+bOjUOcAQ8LTV5tESxn0nTinMoNWE8SyuVueTuMItk3BFg6bhfr9ncP5fp1ptCq+0JJS8gdYcc6/jnIPn0XrvjcJdXzOtNtcXLUdR9IVCAxBKbo2beUzFVdReGSffItzT6X7gt1abGyqSZyJuV/BN3A24CKdoJ+CyD6zo/91ZkHE2i4wfxV2MG+Oqza/o5bXAg7jSZ7/0BTbKkmE8rgThYtzNsBB38a+CC9FZBfedTcD9pivgbmiLU75PAn/FFXp+viw5vazvxxU1/ifN72kZTZPCOC/7//qsL2XIMB5nh9oRd62vQzO0aynuIf4QzrxwbZoangXINA13723u5VkJd42/jrv3HgR+0482szD/Dz6rYZLrSKElAAAAAElFTkSuQmCC" alt="Javhastudios">
+  </a>
+  <div class="logo-tagline"><span>Filter</span> Phase</div>
+  <a href="https://www.javhastudios.com" target="_blank">
+    <img class="logo-img" src="data:image/png;base64,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" alt="">
+  </a>
+</div>
+
+<div class="main">
+
+  <div class="controls">
+    <div class="ctrl-group">
+      <span class="ctrl-label">Orden</span>
+      <select id="order">
+        <option value="1">6 dB/oct</option>
+        <option value="2" selected>12 dB/oct</option>
+        <option value="3">18 dB/oct</option>
+        <option value="4">24 dB/oct</option>
+      </select>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">Fc</span>
+      <input type="range" id="fc" min="20" max="20000" step="1" value="1000">
+      <span class="val-display" id="fc-val">1000 Hz</span>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <div class="status-pill pill-mag"   id="pill-mag">Mag @ Fc: — dB</div>
+    <div class="status-pill pill-phase" id="pill-phase">Fase @ Fc: —°</div>
+    <div class="status-pill pill-gd"    id="pill-gd">GD @ Fc: — ms</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Respuesta en Magnitud — dBFS</div>
+    <canvas id="magCanvas" height="180"></canvas>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-line" style="background:var(--c-mag)"></div> Magnitud (dB)</div>
+    </div>
+    <div class="cursor-info" id="cursor-mag">— Mueve el cursor sobre el gráfico</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Respuesta de Fase — grados</div>
+    <canvas id="phaseCanvas" height="180"></canvas>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-line" style="background:var(--c-phase)"></div> Fase (°)</div>
+    </div>
+    <div class="cursor-info" id="cursor-phase">—</div>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">Group Delay — ms</div>
+    <canvas id="gdCanvas" height="180"></canvas>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-line" style="background:var(--c-gd)"></div> Group Delay (ms)</div>
+    </div>
+    <div class="cursor-info" id="cursor-gd">—</div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <a href="https://javhastudios.github.io/tools/" target="_blank" class="footer-link">← Tools</a> &nbsp;·&nbsp;
+  <a href="https://www.javhastudios.com" target="_blank" class="footer-link">© 2026 Javhastudios</a> &nbsp;·&nbsp; All rights reserved
+</div>
+
+<script>
+// ═══════════════════════════════════════════════
+//  FILTER PHASE — Butterworth HPF IIR
+// ═══════════════════════════════════════════════
+
+const N_POINTS = 512;
+const F_MIN = 20;
+const F_MAX = 20000;
+const FS = 48000; // sample rate de referencia
+
+let order = 2;
+let fc = 1000;
+
+// DOM
+const orderSel   = document.getElementById('order');
+const fcSlider   = document.getElementById('fc');
+const fcVal      = document.getElementById('fc-val');
+const pillMag    = document.getElementById('pill-mag');
+const pillPhase  = document.getElementById('pill-phase');
+const pillGd     = document.getElementById('pill-gd');
+const cursorMag  = document.getElementById('cursor-mag');
+const cursorPhase= document.getElementById('cursor-phase');
+const cursorGd   = document.getElementById('cursor-gd');
+
+const magCv  = document.getElementById('magCanvas');
+const phaseCv= document.getElementById('phaseCanvas');
+const gdCv   = document.getElementById('gdCanvas');
+const magCtx  = magCv.getContext('2d');
+const phCtx   = phaseCv.getContext('2d');
+const gdCtx   = gdCv.getContext('2d');
+
+// ─── Controles ─────────────────────────────────
+orderSel.addEventListener('change', () => { order = parseInt(orderSel.value); update(); });
+fcSlider.addEventListener('input', () => {
+  fc = parseInt(fcSlider.value);
+  // Escala logarítmica en el slider
+  const logMin = Math.log10(20), logMax = Math.log10(20000);
+  const ratio = (fcSlider.value - fcSlider.min) / (fcSlider.max - fcSlider.min);
+  fc = Math.round(Math.pow(10, logMin + ratio * (logMax - logMin)));
+  fcVal.textContent = fc >= 1000 ? (fc/1000).toFixed(fc % 1000 === 0 ? 0 : 1) + ' kHz' : fc + ' Hz';
+  update();
+});
+
+// Slider logarítmico: mapear posición lineal → freq log
+fcSlider.addEventListener('input', () => {
+  const logMin = Math.log10(F_MIN), logMax = Math.log10(F_MAX);
+  const ratio = (fcSlider.value - parseInt(fcSlider.min)) / (parseInt(fcSlider.max) - parseInt(fcSlider.min));
+  fc = Math.round(Math.pow(10, logMin + ratio * (logMax - logMin)));
+  fcVal.textContent = fc >= 1000 ? (fc/1000).toFixed(1) + ' kHz' : fc + ' Hz';
+  update();
+});
+
+// ─── Frecuencias (log) ─────────────────────────
+function freqArray() {
+  const arr = new Float64Array(N_POINTS);
+  const logMin = Math.log10(F_MIN), logMax = Math.log10(F_MAX);
+  for (let i = 0; i < N_POINTS; i++) {
+    arr[i] = Math.pow(10, logMin + (i / (N_POINTS - 1)) * (logMax - logMin));
+  }
+  return arr;
+}
+
+// ─── Butterworth HPF: respuesta de frecuencia analítica ───
+// Para cada polo del filtro analógico Butterworth, aplicamos
+// la transformación bilineal y calculamos H(e^jw)
+function butterworthHPF(freqs) {
+  const mag   = new Float64Array(N_POINTS);
+  const phase = new Float64Array(N_POINTS);
+  const gd    = new Float64Array(N_POINTS);
+
+  // Frecuencia de corte normalizada (rad/s digital)
+  const wc = 2 * Math.PI * fc / FS;
+  // Pre-warping bilineal
+  const wca = 2 * FS * Math.tan(wc / 2);
+
+  for (let i = 0; i < N_POINTS; i++) {
+    const f = freqs[i];
+    const w = 2 * Math.PI * f / FS;
+    // z = e^(jw)
+    const zr = Math.cos(w), zi = Math.sin(w);
+
+    // Calcular H(z) como producto de secciones de 2º orden (biquads)
+    // Para HPF Butterworth de orden N, usamos N/2 biquads (+ 1 de 1er orden si N impar)
+    let Hr = 1, Hi = 0; // H total (real, imag)
+
+    const sections = buildBiquads(order, wca);
+    for (const s of sections) {
+      // H_biquad(z) = (b0 + b1*z^-1 + b2*z^-2) / (1 + a1*z^-1 + a2*z^-2)
+      // Evaluado en z = e^(jw):
+      // z^-1 = e^(-jw) = cos(w) - j*sin(w)
+      const c1r = Math.cos(-w),  c1i = Math.sin(-w);
+      const c2r = Math.cos(-2*w), c2i = Math.sin(-2*w);
+
+      const numR = s.b0 + s.b1*c1r + s.b2*c2r;
+      const numI =        s.b1*c1i + s.b2*c2i;
+      const denR = 1    + s.a1*c1r + s.a2*c2r;
+      const denI =        s.a1*c1i + s.a2*c2i;
+
+      // Dividir complejos: (numR+j*numI) / (denR+j*denI)
+      const denom = denR*denR + denI*denI;
+      const qr = (numR*denR + numI*denI) / denom;
+      const qi = (numI*denR - numR*denI) / denom;
+
+      // Multiplicar Hr+jHi por qr+jqi
+      const newHr = Hr*qr - Hi*qi;
+      const newHi = Hr*qi + Hi*qr;
+      Hr = newHr; Hi = newHi;
+    }
+
+    mag[i]   = 20 * Math.log10(Math.sqrt(Hr*Hr + Hi*Hi) + 1e-30);
+    phase[i] = Math.atan2(Hi, Hr) * (180 / Math.PI);
+  }
+
+  // Group delay: -d(phase_rad)/dw ≈ diferencia finita
+  const phaseRad = new Float64Array(N_POINTS);
+  for (let i = 0; i < N_POINTS; i++) {
+    const f = freqs[i];
+    const w = 2 * Math.PI * f / FS;
+    const sections = buildBiquads(order, wca);
+    let Hr2 = 1, Hi2 = 0;
+    for (const s of sections) {
+      const c1r = Math.cos(-w), c1i = Math.sin(-w);
+      const c2r = Math.cos(-2*w), c2i = Math.sin(-2*w);
+      const numR = s.b0 + s.b1*c1r + s.b2*c2r;
+      const numI =        s.b1*c1i + s.b2*c2i;
+      const denR = 1    + s.a1*c1r + s.a2*c2r;
+      const denI =        s.a1*c1i + s.a2*c2i;
+      const denom = denR*denR + denI*denI;
+      const qr = (numR*denR + numI*denI) / denom;
+      const qi = (numI*denR - numR*denI) / denom;
+      const newHr = Hr2*qr - Hi2*qi;
+      const newHi = Hr2*qi + Hi2*qr;
+      Hr2 = newHr; Hi2 = newHi;
+    }
+    phaseRad[i] = Math.atan2(Hi2, Hr2);
+  }
+
+  // Diferencia finita para group delay (en ms)
+  for (let i = 1; i < N_POINTS - 1; i++) {
+    const f1 = freqs[i-1], f2 = freqs[i+1];
+    const dw = 2 * Math.PI * (f2 - f1) / FS;
+    let dp = phaseRad[i+1] - phaseRad[i-1];
+    // Corrección de saltos de fase
+    while (dp >  Math.PI) dp -= 2*Math.PI;
+    while (dp < -Math.PI) dp += 2*Math.PI;
+    gd[i] = -(dp / dw) / FS * 1000; // en ms
+  }
+  gd[0] = gd[1];
+  gd[N_POINTS-1] = gd[N_POINTS-2];
+
+  return { mag, phase, gd };
+}
+
+// ─── Construir biquads Butterworth HPF ────────────
+function buildBiquads(N, wca) {
+  const sections = [];
+  const Kw = wca / 2; // = FS * tan(wc/2)
+  const pairs  = Math.floor(N / 2);
+  const hasOdd = (N % 2) === 1;
+
+  for (let k = 0; k < pairs; k++) {
+    const theta = Math.PI * (2 * k + N + 1) / (2 * N);
+    const pr  = Math.cos(theta);
+    const Q   = -1 / (2 * pr);
+    const fn  = Math.atan(Kw / FS) / Math.PI;
+    const wn  = 2 * Math.PI * fn;
+    const cosw  = Math.cos(wn);
+    const sinw  = Math.sin(wn);
+    const alpha = sinw / (2 * Q);
+    const b0 =  (1 + cosw) / 2;
+    const b1 = -(1 + cosw);
+    const b2 =  (1 + cosw) / 2;
+    const a0 =   1 + alpha;
+    const a1 = -2 * cosw;
+    const a2 =   1 - alpha;
+    sections.push({ b0: b0/a0, b1: b1/a0, b2: b2/a0, a1: a1/a0, a2: a2/a0 });
+  }
+
+  if (hasOdd) {
+    const tn = Math.tan(Math.atan(Kw / FS));
+    const pz = (1 - tn) / (1 + tn);
+    const b0 = (1 + pz) / 2;
+    sections.push({ b0, b1: -b0, b2: 0, a1: -pz, a2: 0 });
+  }
+
+  return sections;
+}
+// ─── Dibujo de gráficos ────────────────────────
+function resizeCanvas(cv) {
+  const W = cv.parentElement.clientWidth - 40;
+  cv.width = W;
+  return W;
+}
+
+function drawGrid(ctx, W, H, xLabels, yLabels, yMin, yMax) {
+  ctx.fillStyle = '#1e1e22';
+  ctx.fillRect(0, 0, W, H);
+
+  const padL = 48, padR = 16, padT = 12, padB = 28;
+  const plotW = W - padL - padR;
+  const plotH = H - padT - padB;
+
+  // Líneas de frecuencia (log)
+  const logMin = Math.log10(F_MIN), logMax = Math.log10(F_MAX);
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+  ctx.lineWidth = 1;
+  xLabels.forEach(f => {
+    const x = padL + ((Math.log10(f) - logMin) / (logMax - logMin)) * plotW;
+    ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + plotH); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.25)';
+    ctx.font = '700 8px Raleway, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(f >= 1000 ? (f/1000)+'k' : f, x, padT + plotH + 16);
+  });
+
+  // Líneas horizontales
+  yLabels.forEach(v => {
+    const y = padT + plotH - ((v - yMin) / (yMax - yMin)) * plotH;
+    ctx.strokeStyle = v === 0 ? 'rgba(255,255,255,0.12)' : 'rgba(255,255,255,0.05)';
+    ctx.lineWidth = v === 0 ? 1.5 : 1;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + plotW, y); ctx.stroke();
+    ctx.fillStyle = 'rgba(255,255,255,0.3)';
+    ctx.font = '700 8px Raleway, sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(v, padL - 5, y + 3);
+  });
+
+  return { padL, padR, padT, padB, plotW, plotH };
+}
+
+function drawCurve(ctx, freqs, values, color, W, H, yMin, yMax, pad) {
+  const {padL, padT, plotW, plotH} = pad;
+  const logMin = Math.log10(F_MIN), logMax = Math.log10(F_MAX);
+
+  ctx.strokeStyle = color;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  let first = true;
+  for (let i = 0; i < N_POINTS; i++) {
+    const x = padL + ((Math.log10(freqs[i]) - logMin) / (logMax - logMin)) * plotW;
+    const v = Math.max(yMin, Math.min(yMax, values[i]));
+    const y = padT + plotH - ((v - yMin) / (yMax - yMin)) * plotH;
+    first ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+    first = false;
+  }
+  ctx.stroke();
+}
+
+function drawFcLine(ctx, color, W, H, pad) {
+  const {padL, padT, plotW, plotH} = pad;
+  const logMin = Math.log10(F_MIN), logMax = Math.log10(F_MAX);
+  const x = padL + ((Math.log10(fc) - logMin) / (logMax - logMin)) * plotW;
+  ctx.strokeStyle = color + '88';
+  ctx.lineWidth = 1.5;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + plotH); ctx.stroke();
+  ctx.setLineDash([]);
+  // Label Fc
+  ctx.fillStyle = color + 'cc';
+  ctx.font = '700 9px Raleway, sans-serif';
+  ctx.textAlign = 'center';
+  const label = fc >= 1000 ? (fc/1000).toFixed(1)+'k' : fc+'';
+  ctx.fillText('Fc ' + label, x, padT + 10);
+}
+
+// ─── Update ────────────────────────────────────
+function update() {
+  const freqs = freqArray();
+  const { mag, phase, gd } = butterworthHPF(freqs);
+
+  // Encontrar valores en Fc
+  const logMin = Math.log10(F_MIN), logMax = Math.log10(F_MAX);
+  const fcIdx = Math.round(((Math.log10(fc) - logMin) / (logMax - logMin)) * (N_POINTS - 1));
+  const magAtFc   = mag[fcIdx].toFixed(1);
+  const phaseAtFc = phase[fcIdx].toFixed(1);
+  const gdAtFc    = gd[fcIdx].toFixed(2);
+  pillMag.textContent   = 'Mag @ Fc: ' + magAtFc + ' dB';
+  pillPhase.textContent = 'Fase @ Fc: ' + phaseAtFc + '°';
+  pillGd.textContent    = 'GD @ Fc: ' + gdAtFc + ' ms';
+
+  // Magnitud
+  {
+    const W = resizeCanvas(magCv);
+    const H = magCv.height;
+    const xL = [20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000];
+    const yL = [0, -3, -6, -12, -24, -48, -60];
+    const pad = drawGrid(magCtx, W, H, xL, yL, -60, 3);
+    drawCurve(magCtx, freqs, mag, '#1db97a', W, H, -60, 3, pad);
+    drawFcLine(magCtx, '#1db97a', W, H, pad);
+  }
+
+  // Fase
+  {
+    const W = resizeCanvas(phaseCv);
+    const H = phaseCv.height;
+    const xL = [20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000];
+    const maxPhase = order * 90;
+    const yStep = order <= 2 ? 45 : 90;
+    const yL = [];
+    for (let v = -maxPhase; v <= maxPhase; v += yStep) yL.push(v);
+    const pad = drawGrid(phCtx, W, H, xL, yL, -maxPhase - 10, maxPhase + 10);
+    drawCurve(phCtx, freqs, phase, '#e0a800', W, H, -maxPhase - 10, maxPhase + 10, pad);
+    drawFcLine(phCtx, '#e0a800', W, H, pad);
+  }
+
+  // Group delay
+  {
+    const W = resizeCanvas(gdCv);
+    const H = gdCv.height;
+    const xL = [20, 50, 100, 200, 500, 1000, 2000, 5000, 10000, 20000];
+    const maxGd = Math.max(2, Math.ceil(Math.max(...gd.slice(5, N_POINTS-5)) * 1.3));
+    const yStep = maxGd > 10 ? 5 : maxGd > 4 ? 2 : 1;
+    const yL = [];
+    for (let v = 0; v <= maxGd; v += yStep) yL.push(v);
+    const pad = drawGrid(gdCtx, W, H, xL, yL, 0, maxGd);
+    drawCurve(gdCtx, freqs, gd, '#4a90d9', W, H, 0, maxGd, pad);
+    drawFcLine(gdCtx, '#4a90d9', W, H, pad);
+  }
+
+  // Guardar para hover
+  window._plotData = { freqs, mag, phase, gd };
+}
+
+// ─── Hover / cursor ────────────────────────────
+function setupHover(cv, cursorEl, color, getVal, unit) {
+  cv.addEventListener('mousemove', (e) => {
+    if (!window._plotData) return;
+    const rect = cv.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const W = cv.width;
+    const padL = 48, padR = 16;
+    const plotW = W - padL - padR;
+    if (mx < padL || mx > padL + plotW) { cursorEl.textContent = '—'; return; }
+    const ratio = (mx - padL) / plotW;
+    const logMin = Math.log10(F_MIN), logMax = Math.log10(F_MAX);
+    const f = Math.pow(10, logMin + ratio * (logMax - logMin));
+    const idx = Math.round(ratio * (N_POINTS - 1));
+    const val = window._plotData[getVal][Math.max(0, Math.min(N_POINTS-1, idx))];
+    const fLabel = f >= 1000 ? (f/1000).toFixed(1) + ' kHz' : Math.round(f) + ' Hz';
+    cursorEl.textContent = fLabel + '  →  ' + val.toFixed(2) + ' ' + unit;
+  });
+  cv.addEventListener('mouseleave', () => { cursorEl.textContent = '—'; });
+}
+
+setupHover(magCv,   cursorMag,   '#1db97a', 'mag',   'dB');
+setupHover(phaseCv, cursorPhase, '#e0a800', 'phase', '°');
+setupHover(gdCv,    cursorGd,    '#4a90d9', 'gd',    'ms');
+
+// Init
+update();
+window.addEventListener('resize', update);
+</script>
+</body>
+</html>

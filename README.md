@@ -17,6 +17,8 @@ Colección de herramientas web para producción musical y mezcla. Acceso directo
 | 🎵 **Generador de Tonos** | Osciladores, ruido blanco y rosa, barrido de frecuencias y presets de referencia |
 | 🎼 **Círculo de Quintas** | Tonalidades, acordes diatónicos, correspondencias armónicas y teclado interactivo |
 | ⚖️ **Pan Checker** | Goniómetro, VU L/R, correlación de fase, balance en dB, inversión de canales y generador de ruido de prueba |
+| 🌀 **Phase Visualizer** | Fórmula de Euler, fasor animado, senoide en tiempo real y efecto de fase de filtro HPF sobre señales de bajo y 808 |
+| 📐 **Filter Phase** | Respuesta en magnitud, fase y group delay de un filtro HPF Butterworth IIR — 6 a 24 dB/oct |
 
 ---
 
@@ -34,4 +36,6 @@ HTML5 · CSS3 · JavaScript puro · Web Audio API — sin frameworks, sin depend
 
 ## Version y Fecha
 
-**V 1.0 - 24 Mayo 2026** —
+**V 1.0 - 24 Mayo 2026** — Lanzamiento inicial (7 herramientas)
+
+**V 1.1 - 26 Mayo 2026** — Pan Checker, Phase Visualizer, Filter Phase
