@@ -134,6 +134,11 @@
         <option value="2" selected>12 dB/oct</option>
         <option value="3">18 dB/oct</option>
         <option value="4">24 dB/oct</option>
+        <option value="5">30 dB/oct</option>
+        <option value="6">36 dB/oct</option>
+        <option value="8">48 dB/oct</option>
+        <option value="12">72 dB/oct</option>
+        <option value="16">96 dB/oct</option>
       </select>
     </div>
     <div class="ctrl-group">
@@ -176,6 +181,34 @@
     <div class="cursor-info" id="cursor-gd">—</div>
   </div>
 
+  <div class="controls" style="margin-top:4px">
+    <div class="ctrl-group">
+      <span class="ctrl-label">Orden</span>
+      <select id="order-b">
+        <option value="1">6 dB/oct</option>
+        <option value="2" selected>12 dB/oct</option>
+        <option value="3">18 dB/oct</option>
+        <option value="4">24 dB/oct</option>
+        <option value="5">30 dB/oct</option>
+        <option value="6">36 dB/oct</option>
+        <option value="8">48 dB/oct</option>
+        <option value="12">72 dB/oct</option>
+        <option value="16">96 dB/oct</option>
+      </select>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">Fc</span>
+      <input type="range" id="fc-b" min="20" max="20000" step="1" value="1000">
+      <span class="val-display" id="fc-val-b">1000 Hz</span>
+    </div>
+  </div>
+
+  <div class="status-bar">
+    <div class="status-pill pill-mag"   id="pill-mag-b">Mag @ Fc: — dB</div>
+    <div class="status-pill pill-phase" id="pill-phase-b">Fase @ Fc: —°</div>
+    <div class="status-pill pill-gd"    id="pill-gd-b">GD @ Fc: — ms</div>
+  </div>
+
 </div>
 
 <div class="footer">
@@ -216,15 +249,6 @@ const gdCtx   = gdCv.getContext('2d');
 
 // ─── Controles ─────────────────────────────────
 orderSel.addEventListener('change', () => { order = parseInt(orderSel.value); update(); });
-fcSlider.addEventListener('input', () => {
-  fc = parseInt(fcSlider.value);
-  // Escala logarítmica en el slider
-  const logMin = Math.log10(20), logMax = Math.log10(20000);
-  const ratio = (fcSlider.value - fcSlider.min) / (fcSlider.max - fcSlider.min);
-  fc = Math.round(Math.pow(10, logMin + ratio * (logMax - logMin)));
-  fcVal.textContent = fc >= 1000 ? (fc/1000).toFixed(fc % 1000 === 0 ? 0 : 1) + ' kHz' : fc + ' Hz';
-  update();
-});
 
 // Slider logarítmico: mapear posición lineal → freq log
 fcSlider.addEventListener('input', () => {
@@ -463,6 +487,10 @@ function update() {
   pillPhase.textContent = 'Fase @ Fc: ' + phaseAtFc + '°';
   pillGd.textContent    = 'GD @ Fc: ' + gdAtFc + ' ms';
 
+  document.getElementById('pill-mag-b').textContent   = 'Mag @ Fc: ' + magAtFc + ' dB';
+  document.getElementById('pill-phase-b').textContent = 'Fase @ Fc: ' + phaseAtFc + '°';
+  document.getElementById('pill-gd-b').textContent    = 'GD @ Fc: ' + gdAtFc + ' ms';
+
   // Magnitud
   {
     const W = resizeCanvas(magCv);
@@ -530,6 +558,35 @@ function setupHover(cv, cursorEl, color, getVal, unit) {
 setupHover(magCv,   cursorMag,   '#1db97a', 'mag',   'dB');
 setupHover(phaseCv, cursorPhase, '#e0a800', 'phase', '°');
 setupHover(gdCv,    cursorGd,    '#4a90d9', 'gd',    'ms');
+
+// ── Controles inferiores (clon sincronizado) ──
+const orderSelB = document.getElementById('order-b');
+const fcSliderB = document.getElementById('fc-b');
+const fcValB    = document.getElementById('fc-val-b');
+
+function setFcDisplay(val, el) {
+  el.textContent = val >= 1000 ? (val/1000).toFixed(val % 1000 === 0 ? 0 : 1) + ' kHz' : val + ' Hz';
+}
+
+orderSelB.addEventListener('change', () => {
+  order = parseInt(orderSelB.value);
+  orderSel.value = orderSelB.value;
+  update();
+});
+
+fcSliderB.addEventListener('input', () => {
+  fc = parseInt(fcSliderB.value);
+  fcSlider.value = fcSliderB.value;
+  setFcDisplay(fc, fcVal);
+  setFcDisplay(fc, fcValB);
+  update();
+});
+
+orderSel.addEventListener('change', () => { orderSelB.value = orderSel.value; });
+fcSlider.addEventListener('input', () => {
+  fcSliderB.value = fcSlider.value;
+  setFcDisplay(parseInt(fcSlider.value), fcValB);
+});
 
 // Init
 update();
