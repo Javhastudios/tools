@@ -18,7 +18,8 @@ Colección de herramientas web para producción musical y mezcla. Acceso directo
 | 🎼 **Círculo de Quintas** | Tonalidades, acordes diatónicos, correspondencias armónicas y teclado interactivo |
 | ⚖️ **Pan Checker** | Goniómetro, VU L/R, correlación de fase, balance en dB, inversión de canales y generador de ruido de prueba |
 | 🌀 **Phase Visualizer** | Fórmula de Euler, fasor animado, senoide en tiempo real y efecto de fase de filtro HPF sobre señales de bajo y 808 |
-| 📐 **Filter Phase** | Respuesta en magnitud, fase y group delay de un filtro HPF Butterworth IIR — 6 a 24 dB/oct |
+| 📐 **Filter Phase** | Respuesta en magnitud, fase y group delay de un filtro HPF Butterworth IIR — 6 a 96 dB/oct — con análisis de señal real |
+| 🎶 **Modos y Escalas** | 7 modos clásicos y 28 escalas con teclado interactivo, acordes diatónicos (tríadas y cuatríadas), modulaciones por acorde pivote, modulación cromática y acordes prestados |
 
 ---
 
@@ -39,3 +40,5 @@ HTML5 · CSS3 · JavaScript puro · Web Audio API — sin frameworks, sin depend
 **V 1.0 - 24 Mayo 2026** — Lanzamiento inicial (7 herramientas)
 
 **V 1.1 - 26 Mayo 2026** — Pan Checker, Phase Visualizer, Filter Phase
+
+**V 1.2 - 27 Mayo 2026** — Modos y Escalas · Filter Phase actualizado (96 dB/oct, análisis de señal real)
