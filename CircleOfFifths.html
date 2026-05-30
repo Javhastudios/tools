@@ -283,7 +283,22 @@
 
   <!-- Piano keyboards -->
   <div class="piano-section" id="pianoSection">
-    <div class="piano-title">Acordes en el teclado</div>
+    <div class="piano-title" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px;">
+      Acordes en el teclado
+      <div style="display:flex; align-items:center; gap:8px; font-size:11px; font-weight:700; letter-spacing:.06em;">
+        <span style="color:var(--muted)">TRÍADA</span>
+        <button id="seventh-toggle" onclick="toggleSeventh()" style="
+          width:40px; height:22px; border-radius:11px; border:none; cursor:pointer;
+          background:var(--border); position:relative; transition:background .2s;
+          flex-shrink:0;">
+          <span id="seventh-toggle-knob" style="
+            position:absolute; top:3px; left:3px;
+            width:16px; height:16px; border-radius:50%;
+            background:#fff; transition:left .2s;"></span>
+        </button>
+        <span style="color:var(--muted)">CUATRÍADA</span>
+      </div>
+    </div>
     <div class="piano-row">
       <div class="piano-label"><div class="piano-label-dot p1"></div></div>
       <div class="piano-wrap" id="piano1"><div class="piano-hint">Selecciona un acorde arriba</div></div>
@@ -294,7 +309,7 @@
     </div>
     <div class="piano-note">
       <div class="piano-note-dot"></div>
-      <span><strong>7ª opcional</strong> — extensión armónica visible en tríadas (I, II, III, IV, VI, VII). En el V7 la séptima es constitutiva del acorde y aparece en el color principal.</span>
+      <span><strong>7ª</strong> — siempre visible en rosa. En modo tríada solo se visualiza; en modo cuatríada también suena.</span>
     </div>
   </div>
 
@@ -732,6 +747,24 @@ function playChordMidis(midis) {
   midis.forEach((midi, i) => playMidi(midi, i * 0.06, 0.6));
 }
 
+let seventhMode = false; // false = tríada, true = cuatríada
+
+function toggleSeventh() {
+  seventhMode = !seventhMode;
+  const btn  = document.getElementById('seventh-toggle');
+  const knob = document.getElementById('seventh-toggle-knob');
+  btn.style.background  = seventhMode ? '#c8f542' : 'var(--border)';
+  knob.style.left       = seventhMode ? '21px' : '3px';
+}
+
+function getMidisToPlay(chord) {
+  if (!chord) return [];
+  if (seventhMode && chord.seventhMidi !== null) {
+    return [...chord.midis, chord.seventhMidi];
+  }
+  return chord.midis;
+}
+
 // Load soundfonts as soon as page is ready
 document.addEventListener('DOMContentLoaded', () => {
   loadSoundfonts();
@@ -758,21 +791,21 @@ let activeChord2 = null;
 function buildChord(rootName, type, tonicName) {
   const rootSemi = NOTE_SEMI[rootName];
   if (rootSemi === undefined) return null;
-  const intervals = CHORD_INTERVALS[type] || [0,4,7];
+  // Siempre tríada base, séptima separada
+  const TRIAD_INTERVALS = { maj: [0,4,7], min: [0,3,7], dim: [0,3,6], dom: [0,4,7] };
+  const intervals = TRIAD_INTERVALS[type] || [0,4,7];
   // Anclar en C3 (48), luego subir octavas hasta que la raíz >= tónica
   let rootMidi = 48 + rootSemi;
   if (tonicName) {
     const tonicSemi = NOTE_SEMI[tonicName];
-    const tonicMidi = 48 + tonicSemi; // tónica en C3
+    const tonicMidi = 48 + tonicSemi;
     while (rootMidi < tonicMidi) rootMidi += 12;
   }
   const midis = intervals.map(i => rootMidi + i);
-  const hasNative7 = type === 'dom';
-  let seventhMidi = null;
-  if (!hasNative7 && SEVENTH_INTERVAL[type] !== undefined) {
-    seventhMidi = rootMidi + SEVENTH_INTERVAL[type];
-  }
-  return { midis, seventhMidi, hasNative7, rootName, type };
+  // Séptima siempre calculada (para pintar en rosa y reproducir si toggle activo)
+  const SEVENTH = { maj: 11, min: 10, dim: 9, dom: 10 };
+  const seventhMidi = SEVENTH[type] !== undefined ? rootMidi + SEVENTH[type] : null;
+  return { midis, seventhMidi, rootName, type };
 }
 
 function drawPiano(wrapId, chord, color) {
@@ -892,7 +925,7 @@ function selectChordFromCell(panelIdx, rootName, type, cellEl, tonicName) {
 
   // Play chord if soundfont available
   if (chord && chord.midis) {
-    playChordMidis(chord.midis);
+    playChordMidis(getMidisToPlay(chord));
   }
 }
 
