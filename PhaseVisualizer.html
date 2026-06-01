@@ -120,6 +120,18 @@
     margin-top: 4px;
   }
 
+  /* Cartelas descriptivas */
+  .panel-desc {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    line-height: 1.6;
+    letter-spacing: 0.2px;
+  }
+
   .footer {
     font-size: 10px; font-weight: 600; letter-spacing: 2px;
     color: var(--muted); text-transform: uppercase; margin-top: 32px;
@@ -250,6 +262,10 @@
     <div class="euler-note" style="margin-top:10px">
       La proyección vertical es Im(e<sup>iθ</sup>) = sin(θ) · La proyección horizontal es Re(e<sup>iθ</sup>) = cos(θ)
     </div>
+    <div class="euler-note" style="margin-top:22px; opacity:1; text-align:left; line-height:1.7; letter-spacing:0.2px; font-weight:500">
+      <strong style="color:var(--accent); font-size:10px; letter-spacing:2px; text-transform:uppercase">Ángulo → Polaridad de la forma de onda</strong><br>
+      El ángulo θ del fasor determina en qué punto del ciclo se encuentra la señal. A <strong>0°</strong> el fasor apunta a la derecha y la onda está en cero cruzando hacia positivo. A <strong>90°</strong> el fasor apunta arriba y la onda alcanza su pico máximo positivo. A <strong>180°</strong> el fasor apunta a la izquierda y la onda vuelve a cero cruzando hacia negativo — si dos señales llegan a este punto en fase opuesta se cancelan. A <strong>270°</strong> el fasor apunta abajo y la onda alcanza su pico máximo negativo. Un filtro que desplaza la fase 90° convierte un coseno en un seno: la forma de la onda no cambia, pero su polaridad y punto de cruce sí, lo que puede causar cancelaciones parciales cuando la señal original y la filtrada se suman.
+    </div>
   </div>
 
 
@@ -315,6 +331,7 @@
           </div>
         </div>
         <div class="gd-ms-badge" id="gd-ms-badge">— ms</div>
+        <p class="panel-desc">Zoom sobre los primeros ciclos de la señal. Muestra con precisión cuántos milisegundos se retrasa la señal filtrada respecto a la original como consecuencia del group delay del HPF. Ese retardo es la traducción temporal del desplazamiento de fase: a mayor frecuencia de corte y mayor orden, más se desplaza la onda en el tiempo.</p>
       </div>
 
       <!-- DERECHA: onda completa -->
@@ -329,6 +346,7 @@
             <div class="wave-legend-dot" style="background:#e0a800"></div>Filtrada (HPF)
           </div>
         </div>
+        <p class="panel-desc" style="margin-top:38px">Vista completa de 50 ms con ambas señales superpuestas. Permite ver cómo el HPF atenúa la amplitud de la señal al recortar las frecuencias graves y cómo la forma de onda filtrada se desfasa progresivamente. Si las dos señales se sumaran en este estado, las zonas donde coinciden en polaridad opuesta se cancelarían, reduciendo el nivel percibido del bajo o el 808.</p>
       </div>
 
     </div>

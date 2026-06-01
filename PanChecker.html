@@ -104,12 +104,12 @@
   }
 
   /* --- VU METERS --- */
-  .vu-wrap { display: flex; gap: 14px; align-items: flex-end; height: 180px; }
+  .vu-wrap { display: flex; gap: 14px; align-items: flex-end; height: 220px; }
   .vu-channel { display: flex; flex-direction: column; align-items: center; gap: 6px; flex: 1; }
   .vu-bar-wrap {
     flex: 1; width: 100%; background: var(--meter-bg); border-radius: 3px;
     overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end;
-    position: relative; min-height: 140px;
+    position: relative; min-height: 180px;
   }
   .vu-bar {
     width: 100%; height: 0%; transition: height 0.06s linear;
@@ -131,7 +131,7 @@
   }
   .vu-scale {
     display: flex; flex-direction: column; justify-content: space-between;
-    height: 140px; padding: 0 4px;
+    height: 180px; padding: 0 4px; align-self: flex-start;
   }
   .vu-scale span {
     font-size: 9px; font-weight: 600; color: rgba(51,51,51,0.5);
@@ -301,7 +301,7 @@
       <div class="panel-title">Medidores L / R</div>
       <div class="vu-wrap">
         <div class="vu-scale">
-          <span>0</span><span>-6</span><span>-12</span><span>-18</span><span>-24</span><span>-∞</span>
+          <span>0</span><span>-10</span><span>-20</span><span>-30</span><span>-40</span><span>-50</span><span>-60</span>
         </div>
         <div class="vu-channel">
           <div class="vu-bar-wrap" id="vu-l-wrap">

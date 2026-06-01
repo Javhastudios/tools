@@ -228,6 +228,20 @@
   .footer a { color: inherit; text-decoration: none; }
   .footer a:hover { text-decoration: underline; }
 
+  /* Cartela círculo de quintas */
+  .circle-desc {
+    margin-top: 18px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    line-height: 1.7;
+    letter-spacing: 0.2px;
+    text-align: left;
+  }
+  .circle-desc strong { color: var(--fg); font-weight: 700; }
+
   @media (max-width: 500px) {
     .info-grid { grid-template-columns: 1fr; }
     .chords-grid { grid-template-columns: repeat(4, 1fr); }
@@ -262,6 +276,8 @@
       <div class="hint" style="margin-top:0">Click para seleccionar tónica · Segundo click para comparar</div>
       <button class="btn-reset-sel" onclick="resetSelection()">✕ Limpiar</button>
     </div>
+    <p class="circle-desc">El círculo de quintas ordena las 12 tonalidades mayores y sus relativas menores según su distancia armónica: cada tonalidad adyacente comparte todas sus notas salvo una, lo que las hace naturalmente compatibles. Es la herramienta de referencia para entender modulaciones, encontrar tonalidades afines y construir progresiones de acordes con sentido tonal. <strong>Haz click en una tonalidad</strong> para ver sus acordes diatónicos y el teclado interactivo. <strong>Haz un segundo click</strong> en otra tonalidad para comparar ambas y detectar notas y acordes comunes — la base de cualquier modulación por acorde pivote.
+    </p>
   </div>
 
   <!-- Panels info -->
