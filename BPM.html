@@ -266,6 +266,18 @@
     margin-top: 2px;
   }
 
+  /* Cartelas de pestañas */
+  .tab-desc {
+    margin-top: 16px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    line-height: 1.6;
+    letter-spacing: 0.2px;
+  }
+
   /* Footer */
   .footer {
     font-size: 10px; font-weight: 600;
@@ -315,7 +327,7 @@
       <input type="number" id="bpmInput" value="120" min="20" max="300" onchange="setBpmManual()">
       <button onclick="changeBpm(1)">+</button>
     </div>
-    <div class="bpm-hint">Pulsa TAP al ritmo de la música · Mínimo 3 taps</div>
+    <div class="bpm-hint"></div>
   </div>
 
   <!-- CALCULADORAS -->
@@ -337,11 +349,13 @@
         </thead>
         <tbody id="delayTable"></tbody>
       </table>
+      <p class="tab-desc">Tiempos de retardo en milisegundos sincronizados con el BPM de la sesión. Úsalos para configurar delays en plugins o hardware de forma que cada repetición caiga en el grid rítmico. Las divisiones con puntillo añaden un tercio extra a la duración, creando un groove desplazado que encaja sin perder el tempo.</p>
     </div>
 
     <!-- REVERB -->
     <div class="tab-content" id="tab-reverb">
       <div class="reverb-grid" id="reverbGrid"></div>
+      <p class="tab-desc">Parámetros de reverb calculados a partir del BPM. Pre-delay: el tiempo que tarda en aparecer la cola de reverb, idealmente alineado con una división corta para que la voz o instrumento principal no quede enmascarado. Decay (RT60): duración de la cola hasta que cae 60 dB; valores sincronizados evitan que la reverb rompa el ritmo entre compás y compás.</p>
     </div>
 
     <!-- DIVISIONES RÍTMICAS -->
@@ -355,6 +369,7 @@
         </thead>
         <tbody id="divTable"></tbody>
       </table>
+      <p class="tab-desc">Duración en milisegundos de cada figura rítmica al BPM actual. Referencia útil para ajustar ataques y releases de compresores, tiempos de side-chain, o cualquier efecto temporal que deba respirar al ritmo de la canción. Un compresor con release en negra suelta la señal justo al principio del siguiente pulso, manteniendo el groove sin aplastar la dinámica.</p>
     </div>
   </div>
 

@@ -128,6 +128,18 @@
   }
   #clear-audio:hover { border-color: #e84040; color: #e84040; }
 
+  /* Cartelas descriptivas */
+  .panel-desc {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    line-height: 1.6;
+    letter-spacing: 0.2px;
+  }
+
   .footer {
     font-size: 10px; font-weight: 600; letter-spacing: 2px;
     color: var(--muted); text-transform: uppercase; margin-top: 32px;
@@ -196,6 +208,7 @@
       <div class="legend-item" id="legend-wave-filt" style="display:none"><div class="legend-line" style="background:#ff7c40"></div> Onda filtrada</div>
     </div>
     <div class="cursor-info" id="cursor-mag">— Mueve el cursor sobre el gráfico</div>
+    <p class="panel-desc">Muestra cómo el filtro atenúa o amplifica cada frecuencia, expresado en dB. La línea vertical indica la frecuencia de corte (Fc). Por encima de 0 dB hay ganancia; por debajo, atenuación. La pendiente de caída (6, 12, 18 o 24 dB/oct) determina la agresividad del corte y está directamente relacionada con el orden del filtro.</p>
   </div>
 
   <div class="panel">
@@ -207,6 +220,7 @@
       <div class="legend-item" id="legend-phase-filt" style="display:none"><div class="legend-line" style="background:#ff7c40"></div> Filtrada</div>
     </div>
     <div class="cursor-info" id="cursor-phase">—</div>
+    <p class="panel-desc">Representa el desplazamiento de fase en grados que introduce el filtro en cada frecuencia. Un filtro de fase lineal no altera la fase (curva plana). Los filtros de fase mínima — como los Butterworth — acumulan rotación progresiva alrededor de Fc. Esto puede causar que instrumentos que comparten esa zona frecuencial lleguen ligeramente desfasados al sumador, afectando la coherencia de la mezcla.</p>
   </div>
 
   <div class="panel">
@@ -218,6 +232,7 @@
       <div class="legend-item" id="legend-gd-filt" style="display:none"><div class="legend-line" style="background:#ff7c40"></div> Retardada</div>
     </div>
     <div class="cursor-info" id="cursor-gd">—</div>
+    <p class="panel-desc">El group delay indica cuántos milisegundos se retrasa cada banda de frecuencias al atravesar el filtro. Un group delay constante (línea plana) significa que todas las frecuencias llegan al mismo tiempo: el filtro no distorsiona la forma del sonido. Picos en torno a Fc delatan que esa zona llega tarde respecto al resto, lo que puede percibirse como una coloración o ensanchamiento antinatural en la imagen estéreo.</p>
   </div>
 
   <div class="controls" style="margin-top:4px">

@@ -42,3 +42,5 @@ HTML5 · CSS3 · JavaScript puro · Web Audio API — sin frameworks, sin depend
 **V 1.1 - 26 Mayo 2026** — Pan Checker, Phase Visualizer, Filter Phase
 
 **V 1.2 - 27 Mayo 2026** — Modos y Escalas · Filter Phase actualizado (96 dB/oct, análisis de señal real)
+
+**V 1.3 - 1 Junio 2026** — Textos descriptivos en BPM Calculator, Generador de Tonos, Pan Checker y Filter Phase

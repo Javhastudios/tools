@@ -233,6 +233,18 @@
   .btn-toggle.warn { background: var(--red); color: #fff; border-color: var(--red); }
 
   /* footer */
+  /* Cartelas descriptivas */
+  .panel-desc {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--muted);
+    line-height: 1.6;
+    letter-spacing: 0.2px;
+  }
+
   .footer { font-size: 10px; font-weight: 600; letter-spacing: 2px; color: var(--muted); text-transform: uppercase; margin-top: 32px; }
   .footer-link { color: inherit; text-decoration: none; }
   .footer-link:hover { text-decoration: underline; }
@@ -308,12 +320,12 @@
           <div class="vu-db" id="db-r">—</div>
         </div>
       </div>
+      <p class="panel-desc">Muestra el nivel de señal independiente de cada canal en dBFS. El marcador de pico (línea fina) se congela en el valor más alto reciente. Si los canales muestran niveles muy distintos de forma sostenida, hay un desequilibrio en la mezcla o un problema en la fuente.</p>
     </div>
-
-    <!-- GONIOMETRO -->
     <div class="panel">
       <div class="panel-title">Campo Estéreo (Goniómetro)</div>
       <canvas id="gonioCanvas" width="220" height="220"></canvas>
+      <p class="panel-desc">Representa la imagen estéreo en el plano M/S. Una nube vertical indica señal centrada o mono; una nube horizontal, máxima amplitud estéreo. Si la figura se inclina lateralmente o colapsa en una línea diagonal, hay problemas de fase o desequilibrio severo entre canales.</p>
     </div>
 
     <!-- CORRELACION DE FASE -->
@@ -327,6 +339,7 @@
         </div>
         <div class="corr-labels"><span>-1 (anti-fase)</span><span>0</span><span>+1 (mono)</span></div>
       </div>
+      <p class="panel-desc">Mide la similitud entre L y R en una escala de −1 a +1. Valores próximos a +1 indican señal coherente o mono. Valores en torno a 0 revelan amplia imagen estéreo. Valores negativos señalan anti-fase: la mezcla perderá energía o colapsará al convertirse a mono.</p>
     </div>
 
     <!-- BALANCE -->
@@ -341,6 +354,7 @@
         </div>
         <div class="balance-labels"><span>L</span><span>Centro</span><span>R</span></div>
       </div>
+      <p class="panel-desc">Muestra la diferencia de nivel promedio entre el canal izquierdo y el derecho. Una mezcla bien centrada debería mantenerse cerca de 0 dB. Desviaciones sostenidas indican que la imagen estéreo está inclinada hacia un lado, lo que puede penalizar en plataformas que normalizan en loudness.</p>
     </div>
 
     <!-- HISTORIAL -->
@@ -353,6 +367,7 @@
         <div class="hist-legend-item"><div class="hist-legend-dot" style="background:#4a90d9"></div> L (dBFS)</div>
         <div class="hist-legend-item"><div class="hist-legend-dot" style="background:#e0a800"></div> R (dBFS)</div>
       </div>
+      <p class="panel-desc">Traza la evolución en el tiempo de los cuatro parámetros clave. Permite detectar secciones concretas de la mezcla con problemas puntuales de fase, picos de nivel o desequilibrios que no serían visibles en una lectura instantánea. Útil para revisar arreglos completos o analizar una canción mientras se reproduce.</p>
     </div>
 
     <!-- INVERSIÓN / CONTROLES -->
@@ -364,6 +379,7 @@
         <button class="btn-toggle" id="inv-r">Fase R (Ø)</button>
         <button class="btn-toggle" id="inv-swap">Intercambiar L↔R</button>
       </div>
+      <p class="panel-desc">Invertir la fase de un canal introduce un desfase de 180° en esa señal. Es útil para diagnosticar problemas de cancelación: si al invertir L o R la correlación sube hacia +1, hay un canal grabado en polaridad incorrecta. Intercambiar L↔R sirve para comprobar si la panoramización de la mezcla es la esperada o está volteada.</p>
     </div>
 
   </div><!-- end viz-grid -->
