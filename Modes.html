@@ -64,16 +64,16 @@
     font-family: 'Raleway', sans-serif;
     font-size: 9px; font-weight: 700; letter-spacing: 1.5px;
     text-transform: uppercase; text-align: center;
-    padding: 8px 2px; border-radius: 3px; cursor: pointer;
+    padding: 10px 2px; border-radius: 3px; cursor: pointer;
     border: 1.5px solid var(--border);
     background: var(--panel); color: var(--muted);
     transition: all 0.15s;
-    display: flex; flex-direction: column; gap: 3px; align-items: center;
+    display: flex; flex-direction: column; gap: 4px; align-items: center;
     min-width: 0; overflow: hidden; width: 100%;
   }
   .mode-btn .mode-num  { font-size: 14px; font-weight: 700; letter-spacing: 0; }
-  .mode-btn .mode-name { font-size: 7px; letter-spacing: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
-  .mode-btn .mode-greek{ font-size: 6px; opacity: 0.7; letter-spacing: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
+  .mode-btn .mode-name { font-size: 9px; letter-spacing: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
+  .mode-btn .mode-greek{ font-size: 8px; opacity: 0.85; letter-spacing: 1px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; width: 100%; }
 
   /* INFO DEL MODO */
   .mode-info { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 4px; min-height: 130px; align-items: start; }
@@ -474,7 +474,7 @@ const MODE_COLORS = [
 ];
 const MODES = [
   {
-    id: 0, num: 'Imaj7', name: 'Jónico', greek: 'Ionian',
+    id: 0, num: 'Imaj7', name: 'Jónico', greek: 'Ionian', rootInC: 'Do',
     // intervalos en semitonos desde Do
     intervals: [0, 2, 4, 5, 7, 9, 11],
     character: 'Brillante, estable, alegre. Es la escala mayor occidental por excelencia.',
@@ -482,42 +482,42 @@ const MODES = [
     alterations: 'Ninguna — es la referencia'
   },
   {
-    id: 1, num: 'II-7', name: 'Dórico', greek: 'Dorian',
+    id: 1, num: 'II-7', name: 'Dórico', greek: 'Dorian', rootInC: 'Re',
     intervals: [0, 2, 3, 5, 7, 9, 10],
     character: 'Menor con un 6º mayor elevado que le da un sabor especial — oscuro pero con esperanza.',
     use: 'Jazz, funk, soul, rock modal. La escala de "So What" de Miles Davis.',
     alterations: 'Mib (3ª menor) · Sib (7ª menor)'
   },
   {
-    id: 2, num: 'III-7', name: 'Frigio', greek: 'Phrygian',
+    id: 2, num: 'III-7', name: 'Frigio', greek: 'Phrygian', rootInC: 'Mi',
     intervals: [0, 1, 3, 5, 7, 8, 10],
     character: 'Oscuro, tenso, exótico. El 2º rebajado le da un sabor español o árabe.',
     use: 'Flamenco, metal, música árabe, bandas sonoras de tensión.',
     alterations: 'Reb (2ª menor) · Mib (3ª menor) · Lab (6ª menor) · Sib (7ª menor)'
   },
   {
-    id: 3, num: 'IVmaj7', name: 'Lidio', greek: 'Lydian',
+    id: 3, num: 'IVmaj7', name: 'Lidio', greek: 'Lydian', rootInC: 'Fa',
     intervals: [0, 2, 4, 6, 7, 9, 11],
     character: 'Soñador, etéreo, flotante. El 4º aumentado crea una tensión irresolta muy característica.',
     use: 'Música de película, jazz moderno, rock progresivo. John Williams lo usa constantemente.',
     alterations: 'Fa# (4ª aumentada)'
   },
   {
-    id: 4, num: 'V7', name: 'Mixolidio', greek: 'Mixolydian',
+    id: 4, num: 'V7', name: 'Mixolidio', greek: 'Mixolydian', rootInC: 'Sol',
     intervals: [0, 2, 4, 5, 7, 9, 10],
     character: 'Mayor con un 7º rebajado — da tensión dominante sin resolución completa.',
     use: 'Rock, blues, country, música celta. La base del riff de "Hey Joe" de Hendrix.',
     alterations: 'Sib (7ª menor)'
   },
   {
-    id: 5, num: 'VI-7', name: 'Eólico', greek: 'Aeolian',
+    id: 5, num: 'VI-7', name: 'Eólico', greek: 'Aeolian', rootInC: 'La',
     intervals: [0, 2, 3, 5, 7, 8, 10],
     character: 'La escala menor natural. Melancólica, introspectiva, dramática.',
     use: 'Rock, pop, música clásica romántica, metal. El lenguaje menor por defecto.',
     alterations: 'Mib (3ª menor) · Lab (6ª menor) · Sib (7ª menor)'
   },
   {
-    id: 6, num: 'VII-7(b5)', name: 'Locrio', greek: 'Locrian',
+    id: 6, num: 'VII-7(b5)', name: 'Locrio', greek: 'Locrian', rootInC: 'Si',
     intervals: [0, 1, 3, 5, 6, 8, 10],
     character: 'El más oscuro e inestable. Tiene un 5º disminuido que lo hace casi inutilizable como centro tonal.',
     use: 'Metal extremo, música atonal, efectos de tensión máxima. Raro como tonalidad principal.',
@@ -1237,7 +1237,7 @@ function renderModeGrid() {
     const btn = document.createElement('button');
     const isActive = currentScale === null && m.id === currentMode;
     btn.className = 'mode-btn' + (isActive ? ' active' : '');
-    btn.innerHTML = `<span class="mode-num">${m.num}</span><span class="mode-name">${m.name}</span><span class="mode-greek">${m.greek}</span>`;
+    btn.innerHTML = `<span class="mode-num">${m.num}</span><span class="mode-name">${m.name}</span><span class="mode-greek">${m.rootInC}</span>`;
     if (isActive) {
       btn.style.background = MODE_COLORS[m.id];
       btn.style.borderColor = MODE_COLORS[m.id];
@@ -1256,7 +1256,7 @@ function renderScaleGrid() {
     const color = getScaleColor(s);
     const btn = document.createElement('button');
     btn.className = 'mode-btn' + (isActive ? ' active' : '');
-    btn.innerHTML = `<span class="mode-name" style="font-size:9px;letter-spacing:1px">${s.name}</span><span class="mode-greek">${s.intervals.length} notas</span>`;
+    btn.innerHTML = `<span class="mode-name" style="font-size:9px;letter-spacing:1px">${s.name}</span><span class="mode-greek" style="font-size:9px;opacity:0.9">${s.intervals.length} notas</span>`;
     if (isActive) {
       btn.style.background = color;
       btn.style.borderColor = color;
