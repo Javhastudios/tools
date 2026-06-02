@@ -716,7 +716,85 @@ function getChordIntervals(root, quality) {
   return quality.intervals || [0];
 }
 
-// ── Acordes diatónicos ──────────────────────────
+// ── Piano samples ───────────────────────────────
+const SAMPLE_BASE = 'sounds/piano/';
+
+// Todos los samples disponibles como MIDI (C3=48, C4=60, C5=72)
+// Nombres: C3,Cs3,D3,Ds3,E3,F3,Fs3,G3,Gs3,A3,As3,B3, C4..B4, C5..B5
+const SAMPLE_NOTE_NAMES = ['C','Cs','D','Ds','E','F','Fs','G','Gs','A','As','B'];
+const AVAILABLE_SAMPLES = [];
+[3,4,5].forEach(oct => {
+  SAMPLE_NOTE_NAMES.forEach((n, idx) => {
+    AVAILABLE_SAMPLES.push({ file: n + oct, midi: 36 + (oct-3)*12 + idx });
+  });
+});
+
+let audioCtx = null;
+const sampleCache = {};
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+async function loadSample(filename) {
+  if (sampleCache[filename]) return sampleCache[filename];
+  const ctx = getAudioCtx();
+  try {
+    const resp = await fetch(SAMPLE_BASE + filename + '.mp3');
+    if (!resp.ok) return null;
+    const buf  = await resp.arrayBuffer();
+    const decoded = await ctx.decodeAudioData(buf);
+    sampleCache[filename] = decoded;
+    return decoded;
+  } catch(e) { return null; }
+}
+
+function nearestSample(targetMidi) {
+  return AVAILABLE_SAMPLES.reduce((best, s) =>
+    Math.abs(s.midi - targetMidi) < Math.abs(best.midi - targetMidi) ? s : best
+  );
+}
+
+let currentChordSources = [];
+
+function stopCurrentChord() {
+  currentChordSources.forEach(s => { try { s.stop(); } catch(e) {} });
+  currentChordSources = [];
+}
+
+async function playChord(rootSemi, intervals) {
+  stopCurrentChord();
+  const ctx = getAudioCtx();
+  if (ctx.state === 'suspended') await ctx.resume();
+
+  const now = ctx.currentTime;
+  const stagger = 0.05; // pequeño arpeggio
+
+  for (let idx = 0; idx < intervals.length; idx++) {
+    const noteMidi = 48 + (rootSemi % 12) + intervals[idx]; // octava 3 base
+    const sample = nearestSample(noteMidi);
+    const buffer = await loadSample(sample.file);
+    if (!buffer) continue;
+
+    const rate = Math.pow(2, (noteMidi - sample.midi) / 12);
+    const src  = ctx.createBufferSource();
+    src.buffer = buffer;
+    src.playbackRate.value = rate;
+
+    const gain = ctx.createGain();
+    gain.gain.setValueAtTime(0.65, now + idx * stagger);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + idx * stagger + 2.8);
+
+    src.connect(gain);
+    gain.connect(ctx.destination);
+    src.start(now + idx * stagger);
+    src.stop(now + idx * stagger + 3.0);
+    currentChordSources.push(src);
+  }
+}
+
+
 function getChordQuality(root, scaleSet) {
   const third  = (root + 3) % 12;
   const thirdM = (root + 4) % 12;
@@ -799,12 +877,14 @@ function renderChords(mode, color) {
         selectedChord = null;
         document.querySelectorAll('.chord-cell').forEach(c => c.style.outline = '');
         renderEmptyChordKeyboard();
+        stopCurrentChord();
         return;
       }
       selectedChord = i;
       document.querySelectorAll('.chord-cell').forEach(c => c.style.outline = '');
       cell.style.outline = `2px solid ${quality ? quality.color : 'var(--muted)'}`;
       renderChordKeyboard(root, quality, noteNames[i]);
+      if (quality) playChord(root, quality.intervals);
     });
 
     cell.appendChild(rootEl);
