@@ -89,6 +89,16 @@
   .btn.danger:hover { background:#e84040; color:#fff; border-color:#e84040; }
 
   /* DIATONIC CHORDS */
+  .voicing-btn {
+    font-family:'Raleway',sans-serif; font-size:9px; font-weight:700;
+    letter-spacing:2px; text-transform:uppercase;
+    padding:5px 16px; border-radius:20px; cursor:pointer;
+    border:1.5px solid var(--border); background:transparent; color:var(--muted);
+    transition:all 0.12s;
+  }
+  .voicing-btn:hover { border-color:var(--green); color:var(--green); }
+  .voicing-btn.active { background:var(--green); border-color:var(--green); color:#fff; }
+
   .diatonic-grid {
     display:grid; grid-template-columns:repeat(7,1fr); gap:8px;
   }
@@ -248,6 +258,9 @@
   <!-- STEP 2: DIATONIC CHORDS -->
   <div class="panel" id="step2Panel" style="display:none">
     <div class="panel-title" id="step2Title">2 · Acordes diatónicos</div>
+    <div style="display:flex; justify-content:center; gap:6px; margin-bottom:16px;">
+      <button class="voicing-btn active" id="vbTriad" onclick="setVoicing('triad')">Tríadas</button>
+      <button class="voicing-btn" id="vb7th" onclick="setVoicing('7th')">Cuatríadas</button>    </div>
     <div class="diatonic-grid" id="diatonicGrid"></div>
     <div style="margin-top:16px; padding-top:14px; border-top:1px solid var(--border)">
       <p style="font-size:10px; font-weight:600; letter-spacing:2px; color:var(--muted); text-transform:uppercase; margin-bottom:10px; opacity:0.5;">Progresión</p>
@@ -297,18 +310,21 @@ function nn(semi, useFlat=false) {
 }
 
 const MODES = [
-  { name:'Jónico (Mayor)',   intervals:[0,2,4,5,7,9,11], chordQualities:['maj','min','min','maj','dom7','min','hdim'] },
-  { name:'Dórico',           intervals:[0,2,3,5,7,9,10],  chordQualities:['min','min','maj','dom7','min','hdim','maj'] },
-  { name:'Frigio',           intervals:[0,1,3,5,7,8,10],  chordQualities:['min','maj','maj','min','hdim','maj','min'] },
-  { name:'Lidio',            intervals:[0,2,4,6,7,9,11],  chordQualities:['maj','dom7','min','hdim','maj','min','min'] },
-  { name:'Mixolidio',        intervals:[0,2,4,5,7,9,10],  chordQualities:['dom7','min','hdim','maj','min','min','maj'] },
-  { name:'Eólico (Menor)',   intervals:[0,2,3,5,7,8,10],  chordQualities:['min','hdim','maj','min','min','maj','dom7'] },
-  { name:'Locrio',           intervals:[0,1,3,5,6,8,10],  chordQualities:['hdim','maj','min','min','maj','dom7','min'] },
-  { name:'Menor armónica',   intervals:[0,2,3,5,7,8,11],  chordQualities:['min','hdim','aug','min','dom7','maj','dim7'] },
-  { name:'Menor melódica',   intervals:[0,2,3,5,7,9,11],  chordQualities:['min','min','aug','dom7','dom7','hdim','hdim'] },
+  { name:'Jónico (Mayor)',   intervals:[0,2,4,5,7,9,11], chordQualities:['maj','min','min','maj','dom7','min','hdim'],  triadQualities:['maj','min','min','maj','maj','min','dim'] },
+  { name:'Dórico',           intervals:[0,2,3,5,7,9,10],  chordQualities:['min','min','maj','dom7','min','hdim','maj'],  triadQualities:['min','min','maj','maj','min','dim','maj'] },
+  { name:'Frigio',           intervals:[0,1,3,5,7,8,10],  chordQualities:['min','maj','maj','min','hdim','maj','min'],   triadQualities:['min','maj','maj','min','dim','maj','min'] },
+  { name:'Lidio',            intervals:[0,2,4,6,7,9,11],  chordQualities:['maj','dom7','min','hdim','maj','min','min'],  triadQualities:['maj','maj','min','dim','maj','min','min'] },
+  { name:'Mixolidio',        intervals:[0,2,4,5,7,9,10],  chordQualities:['dom7','min','hdim','maj','min','min','maj'],  triadQualities:['maj','min','dim','maj','min','min','maj'] },
+  { name:'Eólico (Menor)',   intervals:[0,2,3,5,7,8,10],  chordQualities:['min','hdim','maj','min','min','maj','dom7'],  triadQualities:['min','dim','maj','min','min','maj','maj'] },
+  { name:'Locrio',           intervals:[0,1,3,5,6,8,10],  chordQualities:['hdim','maj','min','min','maj','dom7','min'],  triadQualities:['dim','maj','min','min','maj','maj','min'] },
+  { name:'Menor armónica',   intervals:[0,2,3,5,7,8,11],  chordQualities:['min','hdim','aug','min','dom7','maj','dim7'], triadQualities:['min','dim','aug','min','maj','maj','dim'] },
+  { name:'Menor melódica',   intervals:[0,2,3,5,7,9,11],  chordQualities:['min','min','aug','dom7','dom7','hdim','hdim'],triadQualities:['min','min','aug','maj','maj','dim','dim'] },
 ];
 
 const ROMAN = ['I','II','III','IV','V','VI','VII'];
+
+// Map triad base to 7th extension
+const TRIAD_TO_7TH = { 'maj':'maj7', 'min':'min7', 'dom7':'dom7', 'hdim':'hdim', 'dim':'dim7', 'aug':'aug' };
 
 const QUALITIES = {
   'maj':    { name:'Mayor',          intervals:[0,4,7],       symbol:''      },
@@ -319,6 +335,7 @@ const QUALITIES = {
   'hdim':   { name:'Semidism.',      intervals:[0,3,6,10],    symbol:'m7b5'  },
   'dim7':   { name:'Disminuido 7',   intervals:[0,3,6,9],     symbol:'°7'    },
   'aug':    { name:'Aumentado',      intervals:[0,4,8],       symbol:'+'     },
+  'dim':    { name:'Disminuido',     intervals:[0,3,6],       symbol:'°'     },
   'sus2':   { name:'Sus2',           intervals:[0,2,7],       symbol:'sus2'  },
   'sus4':   { name:'Sus4',           intervals:[0,5,7],       symbol:'sus4'  },
   'maj6':   { name:'Mayor 6',        intervals:[0,4,7,9],     symbol:'6'     },
@@ -342,12 +359,15 @@ function notesLabel(root, quality) {
 
 // All diatonic note semitones for current key
 let diatonicSemis = [];
+let voicing = 'triad'; // 'triad' | '7th'
 
 function getDiatonicChords(tonic, mode) {
   diatonicSemis = mode.intervals.map(i => (tonic+i)%12);
   return mode.intervals.map((interval, idx) => {
     const root = (tonic + interval) % 12;
-    const quality = mode.chordQualities[idx];
+    const quality = voicing === 'triad'
+      ? mode.triadQualities[idx]
+      : mode.chordQualities[idx];
     return { root, quality, degree: idx, roman: ROMAN[idx] };
   });
 }
@@ -639,6 +659,20 @@ function renderSubs(chord) {
     };
     grid.appendChild(card);
   });
+}
+
+function setVoicing(v) {
+  voicing = v;
+  document.getElementById('vbTriad').classList.toggle('active', v === 'triad');
+  document.getElementById('vb7th').classList.toggle('active', v === '7th');
+  if (diatonicChords.length) {
+    diatonicChords = getDiatonicChords(tonic, MODES[modeIdx]);
+    selectedDegree = null;
+    renderDiatonicGrid();
+    document.getElementById('emptyState').style.display = 'block';
+    document.getElementById('subsContent').style.display = 'none';
+    setStep(2);
+  }
 }
 
 // ── INIT ──────────────────────────────────────────
